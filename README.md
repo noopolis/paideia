@@ -39,6 +39,16 @@ The evaluation language must support:
 Captured runs can be evaluated again under new criteria without rerunning the
 agent. Testing a changed prompt requires a fresh isolated run.
 
+An optimization candidate must support multiple files together: agent instructions,
+textual skills, supporting Markdown documents and examples, with shared references
+preserved. Authors explicitly declare editable files or sections and locked content.
+Templates are optional; ordinary Markdown is a first-class input. Adapters map these
+resources into the runtime's native instruction and skill-loading mechanisms, with
+evidence distinguishing installed files, instructions actually supplied and skills
+loaded on demand. Unsupported or unobserved behavior must remain explicit. The
+experiment records the exact candidate files and effective inputs it can observe;
+DSPy needs an explicit mapping to editable components, not just a template renderer.
+
 Optimization uses training data for feedback, validation data for candidate
 selection and a sealed test set for final comparison with the baseline. Evidence,
 memory fixtures, model identity and evaluation rules must be recorded so that

@@ -41,6 +41,10 @@ DSPy bridge is a narrow Python integration boundary.
   scheduling, deployment and memory behavior remain owned by their existing packages.
 - Optimize declared editable prompts/examples. Preserve fixed identity, access
   policies and mandatory criteria. Keep training, validation and test data separate.
+- Candidates support multiple instruction, textual skill and supporting Markdown
+  files together, including references and explicit editable/locked sections.
+  Templates are optional. Distinguish installed resources from effective instructions
+  and observed on-demand skill loads; file existence alone does not prove consumption.
 - Use local artifacts by default. No dataset, report or package publication is
   implied by running an experiment.
 
