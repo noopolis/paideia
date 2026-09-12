@@ -27,6 +27,16 @@ DSPy bridge is a narrow Python integration boundary.
   borrow mutable production workspaces, credentials, memory stores or network rooms.
 - Tests declare observable behavior and output criteria, not hidden reasoning.
   Missing observations are explicit; they are never a successful check.
+- YAML authors composable logical rulesets: existence/absence, counts, event
+  sequences, conditions, thresholds, weighted scores and reusable parameterized
+  rules. Keep event-order predicates separate from evaluation scheduling.
+- DSPy reflection and semantic judges use explicitly selected subscription-backed
+  inference adapters, independently of the subject's runtime. Never silently fall
+  back to a paid API, copy login credentials or fabricate unsupported model options
+  or usage. Embedding backends declare their own capabilities and billing route.
+- The local visualizer observes persisted experiment events and can replay them.
+  It must not drive cognition on page loads, change evaluation results or expose
+  sealed test data to the optimization phase.
 - Evaluators and optimizers operate on versioned cases and captures. Production
   scheduling, deployment and memory behavior remain owned by their existing packages.
 - Optimize declared editable prompts/examples. Preserve fixed identity, access

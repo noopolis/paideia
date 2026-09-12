@@ -27,6 +27,9 @@ The evaluation language must support:
 
 - Mechanical checks on text, structured output, files, tool calls, arguments,
   results, ordering and the identity of artifacts used across steps.
+- Existence and absence, counts, reusable parameterized rulesets and nested
+  `all`/`any`/`not` expressions. Event-order assertions and evaluation-stage
+  execution order are separate: independent checks need no invented sequence.
 - Prompt-based semantic judges, embedding comparisons and custom evaluators.
 - Logical composition, conditions, thresholds, progressive evaluation and
   weighted scores. Mandatory gates cannot be offset by a higher average.
@@ -41,6 +44,20 @@ selection and a sealed test set for final comparison with the baseline. Evidence
 memory fixtures, model identity and evaluation rules must be recorded so that
 apparent gains can be distinguished from leakage or changed conditions. Quality,
 latency and token/cost measurements remain visible separately.
+
+DSPy's optimizer and semantic judges must use Paideia's subscription-backed
+inference adapters to the authenticated coding CLIs. The tested agent runtime is
+selected independently from the optimizer and judge. Authentication failures or
+unsupported requests must not silently fall back to paid APIs. Embeddings need
+their own declared backend, such as a local model; a text CLI does not imply an
+embedding endpoint.
+
+A local visualizer is part of the product: watch training progress, inspect
+candidate prompt diffs and per-case evidence, follow the rule tree and its
+pass/fail/unknown/skipped results, and compare baseline, validation and final test
+scores alongside measured usage. The same view replays saved runs. It observes
+the experiment ledger; opening or refreshing it must not rerun agents or judges,
+or expose sealed test results during optimization.
 
 Paideia owns experiments and evaluation. Daimon owns cognition, Mneme owns memory,
 Spawnfile owns workspace compilation and deployment, Moltnet owns transport, and

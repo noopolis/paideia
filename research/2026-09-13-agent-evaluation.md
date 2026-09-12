@@ -157,6 +157,24 @@ Each registered evaluator supplies an ID/version, configuration schema, required
 
 Logical nodes compose evaluator results: `all`, `any`, `not`, numeric thresholds and explicit conditions. Mechanical sequence/count operators inspect events; they are not another scripting language. References resolve to previous results or immutable inputs, with cycle detection. Future reuse should use named local references and checked argument substitution, not broad templating that can execute code or fetch remote files during parsing.
 
+**User-required authoring flexibility:** make existence/absence, matching, counts
+and temporal predicates first-class, alongside arbitrary registered evaluators.
+Authors must be able to nest logical combinations and reuse parameterized
+rulesets. An existence check means that matching evidence is present; it does not
+require an order. No matching call in a complete trace fails an existence check;
+no matching call in an incomplete trace is unknown. Absence can be established
+only over a declared, completely
+observed scope: a missing event in a truncated trace is unknown. An ordered check
+matches a sequence and its bindings; unrelated extra events are permitted unless
+the rule explicitly asks for an exact sequence. Distinguish call dispatch from
+successful completion in both predicates.
+
+**Two independent orders:** event-order predicates evaluate the subject's actual
+behavior, while stages/dependencies determine when Paideia evaluates rules. A
+cheap schema check before an expensive judge says nothing about the order of
+the subject's tool calls. Each result must expose both its matched evidence and
+its evaluation dependencies so this distinction remains visible in the UI.
+
 Use YAML 1.2 with unique string keys, no custom executable tags, bounded input/alias expansion, no silent unknown keys and clear source locations in errors. Keep sequential stages in arrays; mapping order must not become execution order. A resolved JSON plan and its digest accompany the original YAML. [YAML specification](https://yaml.org/spec/1.2.2/), [TypeScript YAML parser controls](https://eemeli.org/yaml/).
 
 ### Results and progressive execution
@@ -165,7 +183,7 @@ Use YAML 1.2 with unique string keys, no custom executable tags, bounded input/a
 |---|---|---|
 | `pass` | Required observation exists and the criterion is met | Eligible evidence; score may still be fractional |
 | `fail` | Observation establishes a violated criterion | A mandatory gate blocks promotion |
-| `unknown` | Required observation is absent, incomplete, redacted or unsupported | Cannot satisfy a mandatory gate; do not invent zero measurements |
+| `unknown` | Necessary observation coverage is unavailable, incomplete or redacted, so the criterion cannot be decided | Cannot satisfy a mandatory gate; do not invent zero measurements |
 | `error` | Evaluator/adapter infrastructure failed or returned invalid data | Invalid experiment evidence; retry only under the declared policy |
 | `skipped` | A declared condition or earlier gate prevented execution | Not success and not an observed failure; record the reason |
 
@@ -244,6 +262,72 @@ Treat candidate outputs and source documents as untrusted data inside a judge re
 
 Embedding similarity is useful for relevance, semantic overlap or duplicate detection. Pin model/version, vector normalization, distance formula, reference digest and calibration. High similarity can coexist with a reversed fact, wrong number or negation: it is not a grounding test. Keyword bans likewise catch specific leaks, not good prose. [Embedding assertion mechanics](https://www.promptfoo.dev/docs/configuration/expected-outputs/similar/).
 
+## Subscription-backed optimization and judging
+
+The user requires DSPy to consume our authenticated subscriptions through
+Paideia. There are two separate integrations: the subject adapter runs the agent
+being evaluated, and an inference adapter supplies text generations for DSPy's
+reflection/proposal model and semantic judges. They may select different CLIs,
+models and subscription profiles. Using a subscription for the subject alone
+does not satisfy this requirement.
+
+Follow-up source inspection recommends pinning DSPy **3.3.1** for the first
+subscription bridge: its `BaseLM` supports `forward_contract = "typed_lm"` and
+`forward(LMRequest) -> LMResponse`; ordinary calls still return the text lists
+GEPA reflection expects. Current main has moved toward `dspy.LM(engine=...)`,
+so these contracts must not be mixed. This is source-level feasibility, with
+no bridge execution yet. [Pinned BaseLM](https://github.com/stanfordnlp/dspy/blob/3.3.1/dspy/clients/base_lm.py), [pinned GEPA reflection](https://github.com/stanfordnlp/dspy/blob/3.3.1/dspy/teleprompt/gepa/gepa_utils.py), [migration](https://dspy.ai/community/normalized-lm-api-migration/).
+
+The proposed Python bridge must connect DSPy's public custom-model interface to
+Paideia's subscription inference service. A generation request and result need
+versioned prompt/messages, supported options, actual model identity, output,
+terminal status and honest usage metadata. This is a required integration to
+prove, not an already working bridge. Authentication stays with each CLI's saved
+login mechanism. Do not copy credentials into case workspaces, require API keys,
+or fall back to an API provider when login, quota or a requested feature fails.
+Judges and reflection run in fresh bounded contexts with unrelated tools and
+customizations disabled; subject runs retain their declared native tool loop.
+
+Capabilities must distinguish text generation, structured output, embeddings,
+sampling controls and cancellation. Unsupported controls cannot be silently
+dropped or reported as honored. Text subscriptions do not automatically provide
+embedding vectors: use an explicitly configured local embedding model or another
+authorized backend, with no hidden paid-API fallback. Judge/proposal/subject
+usage remains separately attributable. CLI quota exhaustion is an explicit
+experiment pause/failure reason, not a reason to bill another provider.
+
+Bind every enabled inference route explicitly, including reflection, judges,
+teachers and DSPy defaults. Reject unspecified/API-backed routes and unsupported
+optimizer features before generation. The first conformance target is one text
+generation, GEPA reflection and one semantic judge, not every DSPy optimizer.
+Read-only CLI access is not tool-free; inference-side tool isolation needs its
+own verified capability. Local CLI preflight found saved Claude and Codex
+subscription logins, and a Grok login record; no generation was run in this check.
+
+## Local training visualizer
+
+The visualizer is a required local live-and-replay view over Paideia's persisted
+experiment events. Its first useful surface should show:
+
+- Experiment phase, active case/candidate, completed work, failures and remaining
+  declared budget. A disconnected or stalled stream must be visible.
+- Candidate lineage and prompt diffs, baseline comparisons and separate training,
+  validation and final test results, with repeated-run variation and coverage.
+- The authored rule tree, evaluation dependencies and each predicate's result,
+  weighted contribution, skipped/unknown reason and matched event/artifact evidence.
+- The subject's observed tool sequence separately from evaluation execution;
+  inspect the exact artifact and receipt behind an order or existence assertion.
+- Subject, optimizer and judge usage, plus embedding usage where applicable;
+  distinguish subscription accounting, API-equivalent estimates and unknown values.
+
+The runner owns experiments; the visualizer reads their events. Page loads,
+refreshes and replay must not start cognition, rerun a judge or recompute an old
+score with changed rules. A deliberate rescore is a new identified evaluation
+using the saved capture. The view reconnects by event identity, retains original
+results and shows capture/evaluator versions. It exposes only approved projections
+of private traces, and keeps sealed test inputs/results inaccessible during
+optimization. The CLI must remain usable without the visualizer.
+
 ## Cost and runtime limits
 
 Run an initial eight native trials—four representative cases, twice—before promising an optimization budget. Record actual model identity, input tokens, cache-read/write subsets where emitted, output tokens, number of model requests if observable, tool calls, duration, terminal status and measurement completeness. Measure judge and reflection calls separately. These are proposed pilot counts, not trials already run.
@@ -260,6 +344,7 @@ After the pilot, report `native trial cost × planned trials + judge cost + refl
 2. **DSPy propagation proof:** a real predictor and scoped adapter change one instruction slot, run the same native runtime, and show the changed text in its effective captured request. A separate test proves demonstrations reach their declared slot if that feature is included. Reflection/judging must never route through the subject adapter.
 3. **A bounded experiment:** freeze cases/rubrics, run the pilot, optimize within the declared cap, select on validation, compare against baseline on a sealed small test set, and emit a local candidate bundle with evidence. No automatic deployment.
 4. **Runtime neutrality acceptance:** run the same case and evaluation plan through both adapters, changing only the selected runtime profile and its declared bindings. Verify the standalone adapter works without Daimon installed. Adding it must not require runtime-specific branches in the core or evaluator language. Unsupported observations remain explicit; two working integrations do not certify unimplemented adapters.
+5. **Subscription and visualizer acceptance:** run real DSPy proposal and semantic-judge generations through the selected authenticated subscription adapters, with API-key fallbacks disabled. Exercise login/quota/unsupported-option failures. Show the same experiment live and from saved events; opening, refreshing and replaying the view must create no agent or inference calls and preserve the scored evidence.
 
 Offline mutation tests must catch: deleted tool use, failed validation, wrong digest, out-of-order completion, same digest with wrong author, fake/cross-run receipt, edited bytes after validation, truncated trace, missing terminal event, evaluator timeout, NaN/out-of-range score, duplicate YAML keys, unknown evaluator, `not(unknown)`, skipped judge denominator inflation, and attempted changes to locked prompt/policy files. Do not reject a harmless extra read unless the case explicitly requires an exact sequence.
 
