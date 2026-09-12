@@ -4,7 +4,25 @@ Research date: 13 September 2026. **Design proposal; no evaluator, adapters or o
 
 **Recommendation:** build a small TypeScript experiment runner with readable YAML rules, trusted run capture and an extensible evaluator contract. Integrate DSPy through a thin, pinned Python bridge. Let the real agent runtime execute the work. Do not rebuild its tool loop inside DSPy. Keep frozen captures useful independently of optimization: capture once, evaluate repeatedly, and rerun the agent when its effective inputs change.
 
-The first useful result is a demonstrated comparison: the same isolated task and evidence run through one true native runtime, with a validator-to-filing chain tied to the exact artifact, followed by a small DSPy prompt optimization experiment and a sealed test comparison. A framework inventory or an attractive scalar score is not that result.
+The first useful result is a demonstrated comparison: the same isolated task, evidence and evaluation plan run through two independent native harnesses, including one outside Daimon, with a validator-to-filing chain tied to the exact artifact, followed by a small DSPy prompt optimization experiment and a sealed test comparison. A framework inventory or an attractive scalar score is not that result.
+
+## Runtime independence is a hard constraint
+
+Paideia must be able to integrate any agent exposed through an accessible CLI,
+SDK or service interface. Daimon, Claude Code, Codex and Pi are peer adapters;
+external agents must not require a Daimon wrapper. The core must install and run
+without any Noopolis runtime or organization compiler.
+
+Cases, evaluator definitions, normalized captures and the optimizer protocol are
+runtime-independent. New runtimes plug into the public adapter contract without
+changing the core or YAML language. Each adapter declares the observations and
+prompt controls it can actually provide. A callable agent with only final-output
+access can still be evaluated on output; process checks it cannot expose remain
+unknown, and unsupported prompt slots cannot be optimized.
+
+Two independent native adapters are part of initial acceptance, not a deferred
+extension. They establish that the common contract works across implementations;
+they do not imply every possible integration is already implemented.
 
 ## What exists already
 
@@ -238,10 +256,10 @@ After the pilot, report `native trial cost × planned trials + judge cost + refl
 
 ## First vertical slice and acceptance
 
-1. **Capture and rescore:** one small fixture task, one true Daimon/Pi runtime path, fixture MCP/tool journal, artifact snapshots, JSONL capture and readable YAML using mechanical checks plus one semantic judge. An exported trace can be rescored without invoking the subject again.
+1. **Capture and rescore:** one small fixture task through two independent native harnesses, including one outside Daimon, fixture MCP/tool journal, artifact snapshots, JSONL capture and readable YAML using mechanical checks plus one semantic judge. An exported trace can be rescored without invoking the subject again.
 2. **DSPy propagation proof:** a real predictor and scoped adapter change one instruction slot, run the same native runtime, and show the changed text in its effective captured request. A separate test proves demonstrations reach their declared slot if that feature is included. Reflection/judging must never route through the subject adapter.
 3. **A bounded experiment:** freeze cases/rubrics, run the pilot, optimize within the declared cap, select on validation, compare against baseline on a sealed small test set, and emit a local candidate bundle with evidence. No automatic deployment.
-4. **Runtime neutrality:** add a second independently implemented native adapter—standalone Codex or Claude Code—and run the same fixture/check contract. Until then, describe only the adapter contract as runtime-neutral, not all integrations as complete.
+4. **Runtime neutrality acceptance:** run the same case and evaluation plan through both adapters, changing only the selected runtime profile and its declared bindings. Verify the standalone adapter works without Daimon installed. Adding it must not require runtime-specific branches in the core or evaluator language. Unsupported observations remain explicit; two working integrations do not certify unimplemented adapters.
 
 Offline mutation tests must catch: deleted tool use, failed validation, wrong digest, out-of-order completion, same digest with wrong author, fake/cross-run receipt, edited bytes after validation, truncated trace, missing terminal event, evaluator timeout, NaN/out-of-range score, duplicate YAML keys, unknown evaluator, `not(unknown)`, skipped judge denominator inflation, and attempted changes to locked prompt/policy files. Do not reject a harmless extra read unless the case explicitly requires an exact sequence.
 

@@ -14,6 +14,15 @@ DSPy bridge is a narrow Python integration boundary.
 
 ## Boundaries
 
+- Harnessing arbitrary agents is a hard product requirement. Daimon, Claude Code,
+  Codex, Pi and future CLI/SDK/service integrations are peer adapters. The core,
+  case language, evaluator registry and optimizer protocol have no mandatory
+  dependency on Daimon, Spawnfile, Mneme or another agent framework.
+- An external agent must not need a Daimon wrapper. Add runtimes through adapters
+  without modifying the core or evaluation language. Declare observable events
+  and editable prompt slots explicitly; unavailable capabilities stay unavailable.
+- First implementation acceptance requires the same cases and evaluator plan to
+  run through two independent native adapters, including one outside Daimon.
 - Runtime adapters harness agents; they do not impersonate production agents or
   borrow mutable production workspaces, credentials, memory stores or network rooms.
 - Tests declare observable behavior and output criteria, not hidden reasoning.

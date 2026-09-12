@@ -8,9 +8,20 @@ evaluator, runtime adapters and DSPy integration are not implemented yet. Read
 the [architecture research](research/2026-09-13-agent-evaluation.md) for the
 proposed YAML language, integration evidence and first implementation slice.
 
-Paideia will run isolated tasks through Daimon, Claude Code, Codex, Pi or another
-runtime adapter. It will capture observable actions and outputs, evaluate them
-under YAML rules, and supply feedback to DSPy for prompt optimization.
+Paideia is designed to harness any agent with an accessible CLI, SDK or service
+interface through a pluggable adapter. Daimon, Claude Code, Codex and Pi are
+peer integrations. The core must work without Daimon or the rest of Noopolis
+installed; an external agent does not have to be wrapped in Daimon.
+
+Task datasets, evaluation rules, captured-run analysis and optimization are
+independent of the selected runtime. Adding an agent means implementing an
+adapter, without changing the evaluation language or core. Adapters declare
+which observations and prompt controls they actually support.
+
+The first implementation is accepted only after the same cases and evaluators
+run against two independently integrated native harnesses, including one outside
+Daimon. It will capture observable actions and outputs, evaluate them under YAML
+rules, and supply feedback to DSPy for prompt optimization.
 
 The evaluation language must support:
 
