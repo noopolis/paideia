@@ -24,6 +24,9 @@ Research syntax is illustrative, not a runnable contract.
 - External agents do not need a Daimon wrapper. Add adapters without changing
   core evaluation semantics. Declare observable events and editable native
   resources; unsupported or unobserved capabilities remain explicit.
+- The planned spawnfile train entry point delegates to Paideia through a public
+  interface. Paideia owns training and retains its own runtime-neutral CLI;
+  Spawnfile supplies the canonical agent/environment; its native runtime executes trials.
 - First implementation acceptance requires the same cases and evaluator plan on
   two independent native adapters, including one outside Daimon.
 - Subject adapters run isolated agents. Inference adapters independently provide
@@ -77,6 +80,8 @@ Research syntax is illustrative, not a runnable contract.
 - Keep illustrative project integrations under examples/: native project/environment,
   adjacent evals/ with one YAML per dataset and inline records, and one README. No required per-case,
   agent/runtime or experiment YAML. Reference private source data without copying it.
+  Name datasets `<name>.paideia.yaml`; `schema: paideia.dataset.v1` identifies their
+  content. Filenames do not grant training or sealed-test access.
   Spawnfile projects declare .spawnignore for evaluator files and generated trial
   artifacts; compiler enforcement is planned, not implemented. Train the canonical
   native definition with explicit isolated overrides, not a second maintained agent.
