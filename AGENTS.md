@@ -73,6 +73,8 @@ Research syntax is illustrative, not a runnable contract.
 - Tests live beside source. Move tests and private fixtures with extracted code.
   Adapter conformance tests stay with the adapter. YAML task corpora live under
   evals/ in named suites, separately from tests of the software itself.
+- Keep illustrative project integrations under examples/, including the Example Newsroom
+  authoring proposal. Reference external source inputs without copying private data.
 - Create nested folders for actual boundaries, not speculative vendors or empty
   source placeholders. Root files are package documentation and configuration.
 
