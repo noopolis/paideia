@@ -1,83 +1,67 @@
 # Paideia
 
-Evaluate agents against readable tasks. Improve their prompts. Test whether the
-improvement generalizes.
+Evaluate agents against readable tasks. Improve their instructions and skills.
+Test whether the improvement generalizes.
 
-**Status: researched design proposal.** This is a new local repository. The
-evaluator, runtime adapters and DSPy integration are not implemented yet. Read
-the [architecture research](research/2026-09-13-agent-evaluation.md) for the
-proposed YAML language, integration evidence and first implementation slice.
+**Status: Markdown architecture seed.** Module guides are in place; the evaluator,
+native adapters, DSPy integration and quality gates are not implemented. Code and
+configuration are paused while the YAML authoring surface is agreed.
 
-Paideia is designed to harness any agent with an accessible CLI, SDK or service
-interface through a pluggable adapter. Daimon, Claude Code, Codex and Pi are
-peer integrations. The core must work without Daimon or the rest of Noopolis
-installed; an external agent does not have to be wrapped in Daimon.
+Paideia will harness agents through their native CLI, SDK or service. Daimon,
+Claude Code, Codex, Pi and OpenClaw are peer integrations; the core does not require
+Daimon or another Noopolis package. The first working slice must run the same
+cases and evaluations through two independent native adapters.
 
-Task datasets, evaluation rules, captured-run analysis and optimization are
-independent of the selected runtime. Adding an agent means implementing an
-adapter, without changing the evaluation language or core. Adapters declare
-which observations and prompt controls they actually support.
+Candidates contain instructions, textual skills, supporting Markdown and examples
+together. Authors declare editable files or sections and locked content. Templates
+are optional. Adapters distinguish installed files, supplied instructions and
+skills observed loading; following a skill needs evidence from the agent's work.
 
-The first implementation is accepted only after the same cases and evaluators
-run against two independently integrated native harnesses, including one outside
-Daimon. It will capture observable actions and outputs, evaluate them under YAML
-rules, and supply feedback to DSPy for prompt optimization.
+Readable YAML will combine mechanical checks, logic, event relationships, semantic
+judges, embeddings and custom evaluators. Missing evidence remains explicit;
+mandatory gates and incomplete coverage cannot disappear inside an average.
 
-The evaluation language must support:
+DSPy will optimize declared resources using training feedback; validation selects,
+then a sealed test compares the frozen candidate with baseline. Subscription
+inference for DSPy and judges is independent of the agent under test, with no
+silent paid API fallback. A local viewer will show live and saved experiments
+without running agents or judges on page load.
 
-- Mechanical checks on text, structured output, files, tool calls, arguments,
-  results, ordering and the identity of artifacts used across steps.
-- Existence and absence, counts, reusable parameterized rulesets and nested
-  `all`/`any`/`not` expressions. Event-order assertions and evaluation-stage
-  execution order are separate: independent checks need no invented sequence.
-- Prompt-based semantic judges, embedding comparisons and custom evaluators.
-- Logical composition, conditions, thresholds, progressive evaluation and
-  weighted scores. Mandatory gates cannot be offset by a higher average.
-- Explicit results for failures, unavailable observations and skipped checks.
-  A runtime that cannot expose a required event cannot silently pass it.
+```text
+paideia/
+├── src/
+│   ├── contracts/       neutral types, schemas and interfaces
+│   ├── cases/           YAML resolution and dataset plans
+│   ├── candidates/      instruction/skill files and editable sections
+│   ├── experiments/     isolation, budgets and trial lifecycle
+│   ├── adapters/        native subject integrations
+│   ├── capture/         observed events, inputs and artifacts
+│   ├── evaluation/      evaluator contracts and execution
+│   │   ├── logic/      composition, coverage and scores
+│   │   ├── mechanical/ observable checks and event relationships
+│   │   ├── semantic/   prompt judges and calibration
+│   │   └── embedding/  similarity and explicit model bindings
+│   ├── optimization/   candidate feedback and DSPy integration
+│   ├── inference/      subscription generations and embeddings
+│   ├── storage/        persisted ledger and immutable artifacts
+│   └── cli/            local command interface
+├── evals/              named task suites with adjacent fixtures and splits
+├── bridges/dspy/       narrow future Python bridge to actual DSPy
+├── viewer/             future local live/replay interface
+├── website/            future Astro/Starlight docs; no deployment yet
+├── docs/               architecture and development decisions
+└── research/           dated evidence and illustrative proposals
+```
 
-Captured runs can be evaluated again under new criteria without rerunning the
-agent. Testing a changed prompt requires a fresh isolated run.
+Each seeded directory has a focused `AGENTS.md` and a `CLAUDE.md` symlink. Unit
+tests will live beside source; task datasets stay separate. Planned gates enforce
+small files and modules, local guides and 90% coverage for each metric globally
+and per executable TypeScript file.
 
-An optimization candidate must support multiple files together: agent instructions,
-textual skills, supporting Markdown documents and examples, with shared references
-preserved. Authors explicitly declare editable files or sections and locked content.
-Templates are optional; ordinary Markdown is a first-class input. Adapters map these
-resources into the runtime's native instruction and skill-loading mechanisms, with
-evidence distinguishing installed files, instructions actually supplied and skills
-loaded on demand. Unsupported or unobserved behavior must remain explicit. The
-experiment records the exact candidate files and effective inputs it can observe;
-DSPy needs an explicit mapping to editable components, not just a template renderer.
-
-Optimization uses training data for feedback, validation data for candidate
-selection and a sealed test set for final comparison with the baseline. Evidence,
-memory fixtures, model identity and evaluation rules must be recorded so that
-apparent gains can be distinguished from leakage or changed conditions. Quality,
-latency and token/cost measurements remain visible separately.
-
-DSPy's optimizer and semantic judges must use Paideia's subscription-backed
-inference adapters to the authenticated coding CLIs. The tested agent runtime is
-selected independently from the optimizer and judge. Authentication failures or
-unsupported requests must not silently fall back to paid APIs. Embeddings need
-their own declared backend, such as a local model; a text CLI does not imply an
-embedding endpoint.
-
-A local visualizer is part of the product: watch training progress, inspect
-candidate prompt diffs and per-case evidence, follow the rule tree and its
-pass/fail/unknown/skipped results, and compare baseline, validation and final test
-scores alongside measured usage. The same view replays saved runs. It observes
-the experiment ledger; opening or refreshing it must not rerun agents or judges,
-or expose sealed test results during optimization.
-
-Paideia owns experiments and evaluation. Daimon owns cognition, Mneme owns memory,
-Spawnfile owns workspace compilation and deployment, Moltnet owns transport, and
-Simfile owns world simulation. Paideia does not steer a production organization
-or deploy its optimized candidates automatically.
-
-The core and runtime adapters will be TypeScript. The researched design proposes
-a thin Python bridge to the actual DSPy library, with prompt-propagation tests
-before claiming that integration works. YAML is the task and evaluation authoring
-format; it is not a place for embedded executable code.
-
-Research findings belong in `research/`. Captures, credentials, private datasets,
-experiment outputs and generated state belong outside Git.
+Read the [architecture](docs/architecture.md),
+[YAML authoring proposal](docs/authoring.md),
+[native harnessing proposal](docs/harnessing.md),
+[development guidelines](docs/development.md) and
+[research evidence](research/2026-09-13-agent-evaluation.md).
+Paideia exports local candidates and evaluation evidence; production deployment,
+memory and organization scheduling remain with their owners.

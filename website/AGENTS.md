@@ -1,0 +1,17 @@
+# Product Documentation Website
+
+Owns the future Astro/Starlight product documentation, separate from viewer/.
+No site code, configuration, build or deployment exists yet.
+
+- Study sibling sites' layouts, content collections, navigation and components
+  before implementation; reuse the established system, not isolated visual tokens.
+- The initial deployment target is GitHub Pages with the repository project base
+  path. No custom domain, CNAME or copied production analytics configuration.
+- Publishing stays disabled until real native-agent optimization is demonstrated
+  and a release is approved. This seed must not add deployment automation.
+- Keep docs factual and runnable examples tied to actual tested contracts.
+  Private evidence and local experiment state never enter site content or builds.
+- As implementation grows, group pages/content/components/styles by their real
+  responsibilities and seed focused guide/symlink pairs for maintained children.
+- Site acceptance later includes build output, navigation and assets under the
+  project base path. A root-domain preview alone cannot prove Pages compatibility.
