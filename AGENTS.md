@@ -48,6 +48,10 @@ Research syntax is illustrative, not a runnable contract.
 - Evaluate observable behavior, not hidden reasoning. Missing observations never
   pass a required check. Hard gates cannot be offset by other scores; missing or
   skipped checks cannot inflate scores by shrinking their denominator.
+- The approved initial [live policy](docs/live-evaluation.md) allows explicitly
+  selected decisive mechanical failures to stop a trial. Repairable failures remain
+  provisional; semantic/embedding checkpoints cannot stop or gate ongoing work.
+  Terminal quality gates still apply. This policy is specified, not implemented.
 - Version cases, captures, criteria and candidates. Train supplies feedback;
   validation selects; a sealed test compares a frozen candidate and baseline.
   Reset fixtures for each attempt. Rescoring is not an independent trial;

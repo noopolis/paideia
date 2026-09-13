@@ -31,6 +31,10 @@ Readable YAML will combine mechanical checks, logic, event relationships, semant
 judges, embeddings and custom evaluators. Missing evidence remains explicit;
 mandatory gates and incomplete coverage cannot disappear inside an average.
 
+The [initial live policy](docs/live-evaluation.md) permits automatic stopping for
+decisive mechanical violations. Repairable failures allow another attempt; semantic
+checkpoints stay advisory during execution. Final quality gates still apply.
+
 DSPy will optimize declared resources using training feedback; validation selects,
 then a sealed test compares the frozen candidate with baseline. Subscription
 inference for DSPy and judges is independent of the agent under test, with no
