@@ -56,7 +56,7 @@ dataset files.
 | `evaluate DATASET --runtime ... --model ... --instructions ... --out ...` | Run every record with one fixed candidate |
 | `train --train ... --test ...` | Optimize using train/validation, freeze, then compare on sealed test |
 | `train --train ... --test ... --dry-run` | Estimate API-equivalent model costs without compilation, authentication, DSPy or model calls |
-| `view OUT_DIRECTORY --port 4322` | Open a completed invocation as a local replay viewer |
+| `view OUT_DIRECTORY --port 4322` | Inspect a completed or recorded failed invocation in the local cockpit |
 
 Exit codes are `0` for completed passing work, `1` for completed work with failed
 checks, `2` for an error, and `130` for cancellation. A successful process launch
@@ -64,7 +64,10 @@ does not establish a completed experiment.
 
 Results stay local. Progress identifies trials; the final `invocation.json`
 contains immutable stored report and candidate references. Use `view` with that
-completed output directory to inspect it without new native or inference calls.
+output directory to inspect it without new native or inference calls. Failed
+invocations preserve a replayable index when reporting succeeds, with partial
+development results and a protected diagnostic reference; unfinished test
+results stay withheld.
 The command prints a loopback URL; Ctrl+C closes the viewer. Its whole-command
 deadline is controlled by `--timeout-ms`.
 
@@ -80,6 +83,13 @@ Add `--view 4322` to an `evaluate` or `train` invocation to observe persisted
 progress while it runs; `--view 0` selects a free port. The live server closes
 with that invocation. `view` uses the recorded frozen-candidate authorization
 for completed test results. There is no separate `replay` command.
+
+The cockpit fits the viewport, with scrolling inside evidence panels. Select a
+metric to see observed training and validation curves, paired comparisons and
+trial results. Raw scores stay distinct from gated optimizer reward. Headline
+deltas use matching cases and show their coverage; missing measurements stay
+unknown. Costs, trial evidence and prompt provenance have separate views.
+Changing views, metrics or refreshing only reads the recorded projection.
 
 For detailed fixture recipes, multi-wake integrations and installation boundaries,
 consult the canonical [harnessing reference](/paideia/reference/harnessing.md)

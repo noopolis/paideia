@@ -65,7 +65,9 @@ not required. The invocation assigns roles explicitly, rather than trusting name
 - **Train:** let real DSPy GEPA propose changes to explicitly editable Markdown.
   Validation selects; sealed tests compare the frozen revision with baseline.
 - **Inspect:** `view OUT_DIRECTORY` opens a local read-only experiment viewer;
-  `--view 0` observes evaluation/training live. Loading a page runs no cognition.
+  `--view 0` observes evaluation/training live. Its cockpit charts training and
+  validation, compares matched cases, and separates gate results from quality
+  scores and costs. Trials and evidence open on demand. Loading a page runs no cognition.
 - **Estimate:** `train --dry-run` makes no model calls. Reports track API-equivalent
   token costs, cache discounts and separate judge models, even with subscriptions.
 - **Extend:** public TypeScript interfaces accept new native adapters, fixture
