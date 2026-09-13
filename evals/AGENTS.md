@@ -3,8 +3,9 @@
 Owns generic authored task datasets used to evaluate agents, not unit tests of
 Paideia's source. No runnable YAML language or task suite is implemented yet.
 
-- Group records, fixture data, rubrics and explicit train/validation/test manifests
-  into named suites. Each implemented suite gets its own guide and CLAUDE.md link.
+- One YAML file is one dataset with inline records. Bind train/test roles at invocation;
+  validation may partition training groups. Group related datasets, fixtures and rubrics
+  into named suites, each with a guide and CLAUDE.md link when implemented.
 - Nest suites by coherent task family when they grow; avoid one global cases or
   fixtures folder collecting unrelated projects.
 - Keep records readable from simple checks through composed/ordered evaluations.

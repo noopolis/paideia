@@ -3,13 +3,15 @@
 Evaluate agents against readable tasks. Improve their instructions and skills.
 Test whether the improvement generalizes.
 
-**Status: Markdown architecture seed.** Module guides are in place; the evaluator,
+**Status: architecture and authoring seed.** Module guides are in place; the evaluator,
 native adapters, DSPy integration and quality gates are not implemented. Code and
-configuration are paused while the YAML authoring surface is agreed.
+product configuration are paused while the YAML authoring surface is agreed.
+Draft example YAML and native declarations are available for that discussion.
 
-Start with the [Example Newsroom authoring example](examples/newsroom-reporting/README.md):
-source files, simple and multi-wake reporter cases, review, composition, reusable
-criteria and train/validation/test datasets. Its fenced YAML is a proposal to refine.
+Open the [architectural view](docs/architecture.html), then the [Example Newsroom authoring example](examples/newsroom-reporting/README.md):
+a production-derived Spawnfile/environment, real records inline in train.yaml and
+test.yaml, and one README.
+The authoring syntax is a proposal to refine; no training has run.
 
 Paideia will harness agents through their native CLI, SDK or service. Daimon,
 Claude Code, Codex, Pi and OpenClaw are peer integrations; the core does not require
@@ -50,7 +52,7 @@ paideia/
 │   ├── storage/        persisted ledger and immutable artifacts
 │   └── cli/            local command interface
 ├── evals/              named task suites with adjacent fixtures and splits
-├── examples/           Markdown authoring examples, starting with newsroom-reporting/
+├── examples/           native environments and dataset examples, starting with newsroom-reporting/
 ├── bridges/dspy/       narrow future Python bridge to actual DSPy
 ├── viewer/             future local live/replay interface
 ├── website/            future Astro/Starlight docs; no deployment yet

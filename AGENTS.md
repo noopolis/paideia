@@ -6,10 +6,11 @@ Integrations consume public interfaces; never import sibling internals.
 
 ## Current phase
 
-This is a Markdown architecture seed, not a working product. The approved module
+This is an architecture and dataset-authoring seed, not a working product. The approved module
 boundaries have local guides. The evaluator, adapters, DSPy bridge, viewer,
 website and automated quality gates are not implemented. Code and configuration
-are paused until the YAML authoring surface is approved.
+are paused until the YAML authoring surface is approved. Draft example YAML and
+native agent declarations are authorized for reviewing that surface.
 
 Read [architecture](docs/architecture.md), [development](docs/development.md) and
 the [research](research/2026-09-13-agent-evaluation.md) before implementation.
@@ -73,8 +74,9 @@ Research syntax is illustrative, not a runnable contract.
 - Tests live beside source. Move tests and private fixtures with extracted code.
   Adapter conformance tests stay with the adapter. YAML task corpora live under
   evals/ in named suites, separately from tests of the software itself.
-- Keep illustrative project integrations under examples/, including the Example Newsroom
-  authoring proposal. Reference external source inputs without copying private data.
+- Keep illustrative project integrations under examples/: native project/environment,
+  one YAML per dataset with inline records, and one README. No required per-case,
+  agent/runtime or experiment YAML. Reference private source data without copying it.
 - Create nested folders for actual boundaries, not speculative vendors or empty
   source placeholders. Root files are package documentation and configuration.
 
