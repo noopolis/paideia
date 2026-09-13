@@ -1,0 +1,101 @@
+{
+  "name": "@noopolis/paideia",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Evaluate native agents, replay evidence and optimize prompt resources.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "bin": {
+    "paideia": "dist/src/cli/main.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./contracts": {
+      "types": "./dist/src/contracts/index.d.ts",
+      "import": "./dist/src/contracts/index.js"
+    },
+    "./adapters": {
+      "types": "./dist/src/adapters/index.d.ts",
+      "import": "./dist/src/adapters/index.js"
+    },
+    "./evaluation": {
+      "types": "./dist/src/evaluation/index.d.ts",
+      "import": "./dist/src/evaluation/index.js"
+    },
+    "./cases": {
+      "types": "./dist/src/cases/index.d.ts",
+      "import": "./dist/src/cases/index.js"
+    },
+    "./candidates": {
+      "types": "./dist/src/candidates/index.d.ts",
+      "import": "./dist/src/candidates/index.js"
+    },
+    "./experiments": {
+      "types": "./dist/src/experiments/index.d.ts",
+      "import": "./dist/src/experiments/index.js"
+    },
+    "./storage": {
+      "types": "./dist/src/storage/index.d.ts",
+      "import": "./dist/src/storage/index.js"
+    },
+    "./optimization": {
+      "types": "./dist/src/optimization/index.d.ts",
+      "import": "./dist/src/optimization/index.js"
+    },
+    "./inference": {
+      "types": "./dist/src/inference/index.d.ts",
+      "import": "./dist/src/inference/index.js"
+    },
+    "./viewer": {
+      "types": "./dist/viewer/index.d.ts",
+      "import": "./dist/viewer/index.js"
+    }
+  },
+  "files": [
+    "dist/src",
+    "dist/viewer",
+    "bridges/dspy",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "check": "npm run typecheck && npm run lint && npm run test:coverage && npm run build",
+    "dev": "tsx src/cli/main.ts"
+  },
+  "dependencies": {
+    "@marcbachmann/cel-js": "8.0.0",
+    "ajv": "8.20.0",
+    "mdast-util-from-markdown": "2.0.3",
+    "mdast-util-to-string": "4.0.0",
+    "yaml": "2.9.1",
+    "zod": "4.6.4"
+  },
+  "peerDependencies": {
+    "@noopolis/daimon": ">=0.2.0"
+  },
+  "peerDependenciesMeta": {
+    "@noopolis/daimon": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.2",
+    "@vitest/coverage-v8": "4.1.11",
+    "eslint": "10.10.0",
+    "jiti": "2.7.0",
+    "tsx": "4.23.13",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.70.0",
+    "vitest": "4.1.11"
+  }
+}

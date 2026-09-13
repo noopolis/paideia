@@ -1,0 +1,23 @@
+{
+  "name": "@noopolis/paideia-website",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Local Paideia documentation, prepared for a GitHub Pages project base.",
+  "scripts": {
+    "dev": "astro dev",
+    "check": "astro sync && tsc --noEmit && vitest run --coverage",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/starlight": "0.42.0",
+    "astro": "7.3.2"
+  },
+  "devDependencies": {
+    "@types/node": "22.20.2",
+    "@vitest/coverage-v8": "4.1.11",
+    "vitest": "4.1.11",
+    "typescript": "5.9.3"
+  }
+}

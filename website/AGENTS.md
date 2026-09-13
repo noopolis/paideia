@@ -1,7 +1,7 @@
 # Product Documentation Website
 
-Owns the future Astro/Starlight product documentation, separate from viewer/.
-No site code, configuration, build or deployment exists yet.
+Owns the local Astro/Starlight product documentation, separate from viewer/.
+The site builds with the /paideia/ project base; publishing remains disabled.
 
 - Study sibling sites' layouts, content collections, navigation and components
   before implementation; reuse the established system, not isolated visual tokens.
@@ -15,3 +15,8 @@ No site code, configuration, build or deployment exists yet.
   responsibilities and seed focused guide/symlink pairs for maintained children.
 - Site acceptance later includes build output, navigation and assets under the
   project base path. A root-domain preview alone cannot prove Pages compatibility.
+
+Use the standalone package scripts: npm ci, npm run check, npm run build, and
+npm run dev -- --host 127.0.0.1. Keep the Starlight shell and navigation standard;
+custom CSS supplies a small palette, not another page framework. Root docs and
+native examples remain canonical; do not copy private runtime evidence into builds.

@@ -1,82 +1,106 @@
 # Paideia
 
-Evaluate agents against readable tasks. Improve their instructions and skills.
-Test whether the improvement generalizes.
+Evaluate agents against readable tasks. Improve their instructions. Test the
+frozen revision on examples the optimizer never saw.
 
-**Status: architecture and authoring seed.** Module guides are in place; the evaluator,
-native adapters, DSPy integration and quality gates are not implemented. Code and
-product configuration are paused while the YAML authoring surface is agreed.
-Draft example YAML and native declarations are available for that discussion.
+Paideia runs agents through native adapters, records what they actually do and
+evaluates that evidence. Dataset YAML combines mechanical checks, ordered tool
+events, logical rules, weighted scores and semantic judges. Selected decisive
+mechanical failures can stop a live trial; semantic checks remain advisory while
+the agent works.
 
-Open the [architectural view](docs/architecture.html), then the [Example Newsroom authoring example](examples/newsroom-reporting/README.md):
-a production-derived Spawnfile/environment, real records inline in evals/train.paideia.yaml
-and evals/test.paideia.yaml, a proposed .spawnignore policy, and one README.
-The authoring syntax is a proposal to refine; no training has run.
+**The first native training experiment works.** Real DSPy GEPA revised a Markdown
+prompt using Claude subscription inference. Both Codex and Daimon changed an
+unseen result from `Gamma` to the required `ack:gamma`. The locked identity and
+original source files stayed unchanged. This small [formatting experiment](examples/native-formatting/README.md)
+proves the integration, not general writing quality.
 
-For Spawnfile projects, the planned `spawnfile train` entry point delegates to
-Paideia using the canonical agent/environment. Paideia's own CLI supports both
-Spawnfile projects and other native agents. Neither training command is implemented yet.
+## Start locally
 
-Paideia will harness agents through their native CLI, SDK or service. Daimon,
-Claude Code, Codex, Pi and OpenClaw are peer integrations; the core does not require
-Daimon or another Noopolis package. The first working slice must run the same
-cases and evaluations through two independent native adapters.
+Requires Node.js 22.19+. Validation does not run an agent or need a subscription.
+From a fresh repository checkout:
 
-Candidates contain instructions, textual skills, supporting Markdown and examples
-together. Authors declare editable files or sections and locked content. Templates
-are optional. Adapters distinguish installed files, supplied instructions and
-skills observed loading; following a skill needs evidence from the agent's work.
-
-Readable YAML will combine mechanical checks, logic, event relationships, semantic
-judges, embeddings and custom evaluators. Missing evidence remains explicit;
-mandatory gates and incomplete coverage cannot disappear inside an average.
-
-The [initial live policy](docs/live-evaluation.md) permits automatic stopping for
-decisive mechanical violations. Repairable failures allow another attempt; semantic
-checkpoints stay advisory during execution. Final quality gates still apply.
-
-DSPy will optimize declared resources using training feedback; validation selects,
-then a sealed test compares the frozen candidate with baseline. Subscription
-inference for DSPy and judges is independent of the agent under test, with no
-silent paid API fallback. A local viewer will show live and saved experiments
-without running agents or judges on page load.
-
-```text
-paideia/
-├── src/
-│   ├── contracts/       neutral types, schemas and interfaces
-│   ├── cases/           YAML resolution and dataset plans
-│   ├── candidates/      instruction/skill files and editable sections
-│   ├── experiments/     isolation, budgets and trial lifecycle
-│   ├── adapters/        native subject integrations
-│   ├── capture/         observed events, inputs and artifacts
-│   ├── evaluation/      evaluator contracts and execution
-│   │   ├── logic/      composition, coverage and scores
-│   │   ├── mechanical/ observable checks and event relationships
-│   │   ├── semantic/   prompt judges and calibration
-│   │   └── embedding/  similarity and explicit model bindings
-│   ├── optimization/   candidate feedback and DSPy integration
-│   ├── inference/      subscription generations and embeddings
-│   ├── storage/        persisted ledger and immutable artifacts
-│   └── cli/            local command interface
-├── evals/              named task suites with adjacent fixtures and splits
-├── examples/           native environments and dataset examples, starting with newsroom-reporting/
-├── bridges/dspy/       narrow future Python bridge to actual DSPy
-├── viewer/             future local live/replay interface
-├── website/            future Astro/Starlight docs; no deployment yet
-├── docs/               architecture and development decisions
-└── research/           dated evidence and illustrative proposals
+```sh
+npm ci
+npm run build
+node dist/src/cli/main.js validate examples/native-formatting/evals/train.paideia.yaml
+node dist/src/cli/main.js --help
 ```
 
-Each seeded directory has a focused `AGENTS.md` and a `CLAUDE.md` symlink. Unit
-tests will live beside source; task datasets stay separate. Planned gates enforce
-small files and modules, local guides and 90% coverage for each metric globally
-and per executable TypeScript file.
+A dataset keeps records and reusable fixtures together:
 
-Read the [architecture](docs/architecture.md),
-[YAML authoring proposal](docs/authoring.md),
-[native harnessing proposal](docs/harnessing.md),
-[development guidelines](docs/development.md) and
-[research evidence](research/2026-09-13-agent-evaluation.md).
-Paideia exports local candidates and evaluation evidence; production deployment,
-memory and organization scheduling remain with their owners.
+```yaml
+schema: paideia.dataset.v1
+id: formatting
+subject: formatter
+
+checks:
+  - id: response-shape
+    eval: json-schema
+    input: output.text
+    schema:
+      type: string
+      pattern: '^ack:[a-z]+$'
+
+records:
+  - id: alpha
+    group: alpha-training
+    input:
+      prompt: 'Token: Alpha'
+    checks:
+      - id: exact-token
+        eval: equals
+        input: output.text
+        value: ack:alpha
+```
+
+Keep `evals/train.paideia.yaml` and `evals/test.paideia.yaml` beside the agent's
+native files. Training reserves an internal validation group; a third YAML is
+not required. The invocation assigns roles explicitly, rather than trusting names.
+
+## Evaluate, train and inspect
+
+- **Evaluate:** install an immutable candidate into a fresh workspace and run
+  native Codex or Daimon. Record inputs, observations, artifacts, coverage and usage.
+- **Train:** let real DSPy GEPA propose changes to explicitly editable Markdown.
+  Validation selects; sealed tests compare the frozen revision with baseline.
+- **Inspect:** `view OUT_DIRECTORY` opens a local read-only experiment viewer;
+  `--view 0` observes evaluation/training live. Loading a page runs no cognition.
+- **Extend:** public TypeScript interfaces accept new native adapters, fixture
+  preparation, custom evaluators and explicit judge/embedding providers.
+
+The [CLI guide](website/src/content/docs/run-locally.md) documents commands and
+budgets. The [DSPy bridge guide](bridges/dspy/README.md) covers its locked Python
+environment. Native agents and Claude inference use saved subscriptions with no
+automatic API fallback. Unknown usage and partial traces remain unknown.
+
+Candidates can contain several instruction and supporting files. The API supports
+locked files, whole-file edits and editable Markdown sections. Native destinations
+are explicit; installing a file does not claim the runtime loaded or followed it.
+
+## Current limits
+
+- Codex supports native thread continuation. Daimon currently supports one wake
+  containing many steps; cross-wake continuity and configured memory are unavailable.
+- Native skill discovery, automatic Spawnfile preparation, `spawnfile train` and
+  `.spawnignore` enforcement still need their owning integrations. The
+  [newsroom example](examples/newsroom-reporting/README.md) is a production-derived
+  authoring fixture, not a runnable replica of the organization.
+- Subject support currently covers Codex and Daimon. Claude supplies optimizer
+  and judge inference; standalone Pi, Claude-as-subject and OpenClaw need adapters.
+- Cancellation reports acknowledged scope and unknown remote work. It cannot
+  roll back actions. Rescoring saved evidence is not a new independent trial.
+
+Everything stays local. Paideia does not deploy prompts, schedule organizations,
+implement memory or publish its documentation site.
+
+## Develop
+
+Read the [implementation status](docs/implementation.md), [architecture](docs/architecture.md), [interactive diagram](docs/architecture.html),
+[YAML reference](docs/authoring.md), [native contracts](docs/harnessing.md) and
+[development guide](docs/development.md).
+
+Tests live beside their modules. The quality gate enforces public module boundaries,
+small files and directories, nested guides, and 90% coverage per executable file.
+The narrow Python bridge runs real DSPy; the rest of the implementation is TypeScript.
+Local [Astro/Starlight documentation](website/README.md) has no publishing workflow.

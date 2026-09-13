@@ -1,0 +1,18 @@
+:root {
+  --sl-color-accent-low: #202049;
+  --sl-color-accent: #7771d8;
+  --sl-color-accent-high: #c9c5ff;
+  --sl-font: system-ui, sans-serif;
+  --sl-font-mono: ui-monospace, monospace;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #e9e7ff;
+  --sl-color-accent: #5750b1;
+  --sl-color-accent-high: #27234f;
+}
+
+.site-title {
+  font-family: var(--sl-font-mono);
+  letter-spacing: -0.04em;
+}

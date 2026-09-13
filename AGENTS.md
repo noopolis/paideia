@@ -6,11 +6,10 @@ Integrations consume public interfaces; never import sibling internals.
 
 ## Current phase
 
-This is an architecture and dataset-authoring seed, not a working product. The approved module
-boundaries have local guides. The evaluator, adapters, DSPy bridge, viewer,
-website and automated quality gates are not implemented. Code and configuration
-are paused until the YAML authoring surface is approved. Draft example YAML and
-native agent declarations are authorized for reviewing that surface.
+Implementation was authorized on 2026-09-13 after the YAML and initial live policy
+review. Build against the approved authoring surface and module boundaries. Track
+implemented, tested and unsupported capabilities separately; a seeded guide is not
+a working feature. Native trials and optimization stay isolated from production.
 
 Read [architecture](docs/architecture.md), [development](docs/development.md) and
 the [research](research/2026-09-13-agent-evaluation.md) before implementation.
@@ -51,7 +50,8 @@ Research syntax is illustrative, not a runnable contract.
 - The approved initial [live policy](docs/live-evaluation.md) allows explicitly
   selected decisive mechanical failures to stop a trial. Repairable failures remain
   provisional; semantic/embedding checkpoints cannot stop or gate ongoing work.
-  Terminal quality gates still apply. This policy is specified, not implemented.
+  Terminal quality gates still apply. Generic live policy is implemented; project-specific
+  audits must still provide authentic evidence.
 - Version cases, captures, criteria and candidates. Train supplies feedback;
   validation selects; a sealed test compares a frozen candidate and baseline.
   Reset fixtures for each attempt. Rescoring is not an independent trial;
@@ -65,12 +65,12 @@ Research syntax is illustrative, not a runnable contract.
 
 ## Grow by responsibility
 
-- Maintained product code is TypeScript, Node.js 22.19 or later. The only proposed
+- Maintained product code is TypeScript, Node.js 22.19 or later. The only
   language exception is the narrow real-DSPy Python bridge in bridges/dspy/.
 - Use named exports and explicit folder entry points. Avoid dependency cycles
   and importing another module's implementation instead of its public interface.
 - Stay under 400 lines per maintained source, test or configuration file; split
-  before reaching the target. The planned emergency ESLint ceiling is 600 lines,
+  before reaching the target. The emergency ESLint ceiling is 600 lines,
   not permission to defer a cohesive split. Never compress code to evade counts.
 - Plan at most 30 direct maintained files per managed directory. Split earlier
   when responsibilities diverge or navigation becomes difficult. Group by behavior,
@@ -92,9 +92,9 @@ Research syntax is illustrative, not a runnable contract.
 - Create nested folders for actual boundaries, not speculative vendors or empty
   source placeholders. Root files are package documentation and configuration.
 
-## Planned mechanical enforcement
+## Mechanical enforcement
 
-These are future requirements, not installed checks:
+These checks run through npm run check and the review workflow:
 
 - ESLint warns above 400 lines, rejects above 600, checks the 30-file directory
   budget and required guide/symlink pairs, and enforces module boundaries.
