@@ -9,8 +9,8 @@ product configuration are paused while the YAML authoring surface is agreed.
 Draft example YAML and native declarations are available for that discussion.
 
 Open the [architectural view](docs/architecture.html), then the [Example Newsroom authoring example](examples/newsroom-reporting/README.md):
-a production-derived Spawnfile/environment, real records inline in train.yaml and
-test.yaml, and one README.
+a production-derived Spawnfile/environment, real records inline in evals/train.yaml
+and evals/test.yaml, a proposed .spawnignore policy, and one README.
 The authoring syntax is a proposal to refine; no training has run.
 
 Paideia will harness agents through their native CLI, SDK or service. Daimon,

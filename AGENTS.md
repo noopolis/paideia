@@ -75,8 +75,11 @@ Research syntax is illustrative, not a runnable contract.
   Adapter conformance tests stay with the adapter. YAML task corpora live under
   evals/ in named suites, separately from tests of the software itself.
 - Keep illustrative project integrations under examples/: native project/environment,
-  one YAML per dataset with inline records, and one README. No required per-case,
+  adjacent evals/ with one YAML per dataset and inline records, and one README. No required per-case,
   agent/runtime or experiment YAML. Reference private source data without copying it.
+  Spawnfile projects declare .spawnignore for evaluator files and generated trial
+  artifacts; compiler enforcement is planned, not implemented. Train the canonical
+  native definition with explicit isolated overrides, not a second maintained agent.
 - Create nested folders for actual boundaries, not speculative vendors or empty
   source placeholders. Root files are package documentation and configuration.
 

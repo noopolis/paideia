@@ -2,6 +2,7 @@ node_modules/
 dist/
 coverage/
 .runtime/
+.paideia/
 .env
 .env.*
 !.env.example
