@@ -23,7 +23,7 @@ Research syntax is illustrative, not a runnable contract.
 - External agents do not need a Daimon wrapper. Add adapters without changing
   core evaluation semantics. Declare observable events and editable native
   resources; unsupported or unobserved capabilities remain explicit.
-- The planned spawnfile train entry point delegates to Paideia through a public
+- The spawnfile train entry point delegates to Paideia through a public
   interface. Paideia owns training and retains its own runtime-neutral CLI;
   Spawnfile supplies the canonical agent/environment; its native runtime executes trials.
 - First implementation acceptance requires the same cases and evaluator plan on

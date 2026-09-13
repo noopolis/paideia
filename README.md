@@ -66,11 +66,14 @@ not required. The invocation assigns roles explicitly, rather than trusting name
   Validation selects; sealed tests compare the frozen revision with baseline.
 - **Inspect:** `view OUT_DIRECTORY` opens a local read-only experiment viewer;
   `--view 0` observes evaluation/training live. Loading a page runs no cognition.
+- **Estimate:** `train --dry-run` makes no model calls. Reports track API-equivalent
+  token costs, cache discounts and separate judge models, even with subscriptions.
 - **Extend:** public TypeScript interfaces accept new native adapters, fixture
   preparation, custom evaluators and explicit judge/embedding providers.
 
 The [CLI guide](website/src/content/docs/run-locally.md) documents commands and
-budgets. The [DSPy bridge guide](bridges/dspy/README.md) covers its locked Python
+budgets. The [cost reference](docs/costs.md) explains estimates and incomplete usage.
+The [DSPy bridge guide](bridges/dspy/README.md) covers its locked Python
 environment. Native agents and Claude inference use saved subscriptions with no
 automatic API fallback. Unknown usage and partial traces remain unknown.
 
@@ -82,8 +85,9 @@ are explicit; installing a file does not claim the runtime loaded or followed it
 
 - Codex supports native thread continuation. Daimon currently supports one wake
   containing many steps; cross-wake continuity and configured memory are unavailable.
-- Native skill discovery, automatic Spawnfile preparation, `spawnfile train` and
-  `.spawnignore` enforcement still need their owning integrations. The
+- Native skill discovery, automatic project preparation and `.spawnignore`
+  enforcement still need their owning integrations. Local `spawnfile train`
+  delegation works through an explicitly registered isolated preparation. The
   [newsroom example](examples/newsroom-reporting/README.md) is a production-derived
   authoring fixture, not a runnable replica of the organization.
 - Subject support currently covers Codex and Daimon. Claude supplies optimizer

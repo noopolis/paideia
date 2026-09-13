@@ -55,6 +55,7 @@ dataset files.
 | `validate DATASET` | Resolve records and criteria without cognition |
 | `evaluate DATASET --runtime ... --model ... --instructions ... --out ...` | Run every record with one fixed candidate |
 | `train --train ... --test ...` | Optimize using train/validation, freeze, then compare on sealed test |
+| `train --train ... --test ... --dry-run` | Estimate API-equivalent model costs without compilation, authentication, DSPy or model calls |
 | `view OUT_DIRECTORY --port 4322` | Open a completed invocation as a local replay viewer |
 
 Exit codes are `0` for completed passing work, `1` for completed work with failed
@@ -66,6 +67,14 @@ contains immutable stored report and candidate references. Use `view` with that
 completed output directory to inspect it without new native or inference calls.
 The command prints a loopback URL; Ctrl+C closes the viewer. Its whole-command
 deadline is controlled by `--timeout-ms`.
+
+Dry-run needs no output directory or optimizer bridge. Repeat `--judge NAME=MODEL`
+to select models independently for named semantic judges. The optimizer has its
+own model selection. Estimates use explicit token/cache assumptions and dated
+rates; they do not measure subscription quota. Unknown costs remain unknown.
+An optional `--cost-config FILE` calibrates those assumptions or supplies exact
+model prices. Recorded reports retain usage and API-equivalent costs even when
+inference uses subscriptions; failed attempts retain a protected progress journal.
 
 Add `--view 4322` to an `evaluate` or `train` invocation to observe persisted
 progress while it runs; `--view 0` selects a free port. The live server closes

@@ -34,10 +34,11 @@ original after training finishes.
 | Daimon subject | Public native harness through its Codex engine, fixture tool observations, output/usage | One wake per trial; partial tool trace |
 | Claude inference | Saved subscription reflection or semantic judgment with tools disabled | Not a Claude subject adapter; no temperature or seed controls |
 
-Both subject adapters install explicit instruction and supporting files. Native
-skill loading, production memory, Moltnet environments, Spawnfile compilation,
-and other subject adapters need their own public integrations. An available
-adapter interface is not proof those integrations exist.
+Both subject adapters install explicit instruction and supporting files. Local
+`spawnfile train` delegates the canonical agent to Paideia through a registered
+isolated preparation; Spawnfile retains compilation ownership. Native skill loading,
+production memory, automatic project environments and other subject adapters remain
+integration work. Static validation does not prove a project's native task completes.
 
 ## Measured native result
 
