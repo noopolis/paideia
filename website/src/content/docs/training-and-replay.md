@@ -36,6 +36,35 @@ cache policy and budgets. `spawnfile train --dry-run` estimates API-equivalent
 cost without launching models. Hard gates remain mandatory; other criteria have
 explicit relative weights, so a weight of two has twice the influence of one.
 
+## Quality and token efficiency
+
+Add a mechanical efficiency check to the same stage as the quality checks:
+
+```yaml
+checks:
+  # Retain the existing grounded and prose checks and their 0.90 / 0.80 floors.
+  - id: efficiency
+    eval: token-efficiency
+    metric: total
+    target_tokens: 40000
+score:
+  linear: {grounded: 52, prose: 28, efficiency: 20}
+gate:
+  all:
+    - {passed: grounded}
+    - {passed: prose}
+```
+
+This is a fragment: append the efficiency check to the existing check list.
+The weights allocate 80% to quality and 20% to efficiency. The efficiency score
+is `target / (target + measured)`; the target is a reference, not a cap. Only
+closed, complete native subject totals count. Cache and reasoning subsets are
+not added again; missing usage has no score and retains its missing weight.
+
+Quality floors remain mandatory. Selection balances the weighted measurements;
+it cannot promise monotonically decreasing tokens. This check cannot stop a live
+agent. See the [complete example](/paideia/reference/token-efficiency.md).
+
 ## Files and locks
 
 Candidates support multiple instruction, textual skill and supporting files.
