@@ -27,6 +27,11 @@ the subject adapter. A Codex subject can use Claude subscription reflection.
 Unsupported controls fail; usage that a native route does not report stays
 unknown. A token budget or seed is not an exact subscription-percentage meter.
 
+The dataset YAML selects named models, focused judges, fallbacks, Jinja templates,
+cache policy and budgets. `spawnfile train --dry-run` estimates API-equivalent
+cost without launching models. Hard gates remain mandatory; other criteria have
+explicit relative weights, so a weight of two has twice the influence of one.
+
 ## Files and locks
 
 Candidates support multiple instruction, textual skill and supporting files.
@@ -36,7 +41,8 @@ on every derivation. Candidate preparation cannot silently widen editable areas.
 
 Installation means the declared bytes were placed in the native workspace.
 Loading and following those instructions are separate claims. The current
-native adapters support instructions and supporting files, not native skills.
+generic file-selection CLI maps instructions and supporting files. Canonical
+Spawnfile integrations prepare native skills through the declared runtime environment.
 
 ## Persisted evidence
 
@@ -52,6 +58,12 @@ private evaluator evidence do not become public merely because a viewer opens.
 The local viewer consumes persisted projections. Loading or replaying a page
 does not invoke an agent, change a score or expose sealed labels. Rescoring must
 create a new evaluation identity rather than overwrite the original result.
+
+`--view` streams persisted measurements to the local console without page reloads.
+`--resume` restores the same output directory after verifying unchanged execution
+inputs and cumulative budgets. Settled native captures are reused; bounded recovery
+can rescore a transient judge failure without rewriting the agent's output. Valid
+failed grades remain failures, and missing usage remains unknown.
 
 Paideia owns this experiment lifecycle. Spawnfile still owns workspace compilation
 and deployment, Daimon owns a single native agent, Moltnet owns transport, and
