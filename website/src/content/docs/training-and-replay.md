@@ -27,6 +27,10 @@ the subject adapter. A Codex subject can use Claude subscription reflection.
 Unsupported controls fail; usage that a native route does not report stays
 unknown. A token budget or seed is not an exact subscription-percentage meter.
 
+Grok model entries accept `reasoning_effort: low | medium | high | xhigh`.
+The default is explicitly `medium`, independent of local CLI configuration.
+Use separate model entries for low-effort judges and a more deliberate optimizer.
+
 The dataset YAML selects named models, focused judges, fallbacks, Jinja templates,
 cache policy and budgets. `spawnfile train --dry-run` estimates API-equivalent
 cost without launching models. Hard gates remain mandatory; other criteria have
