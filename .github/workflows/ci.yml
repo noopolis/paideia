@@ -1,3 +1,21 @@
+# Mirrors Daimon's ci.yml (clean install, then typecheck / lint / test / build on
+# Node 22, pull requests and pushes to main) and adds the gates that only exist
+# here: per-file 90% TypeScript coverage, the locked real DSPy/GEPA Python bridge
+# and the local documentation site.
+#
+# Two known limits, both deliberate:
+#   * `@noopolis/daimon` is an optional peer and is not installed. The published
+#     0.1.2 has no `./runtime` entry point and does not satisfy the declared
+#     `>=0.2.0` range, so there is nothing to install yet. Product code and the two
+#     contract-parity suites therefore load it through an indirect specifier: the
+#     typecheck below covers every file in the project with no exclusions, and the
+#     parity suites skip at runtime with their reason printed in the test output.
+#     When Daimon >=0.2.0 with `./runtime` is published, add it here and the skips
+#     turn into real assertions.
+#   * The eleven test files that drive the real DSPy/GEPA bridge run in a separate
+#     serialized vitest project (see vitest.config.ts). They pass individually but
+#     time out when every worker starts its own interpreter at once. Timeouts are
+#     unchanged and no test is skipped or deleted.
 name: Checks
 
 on:
@@ -14,26 +32,39 @@ concurrency:
 
 jobs:
   check:
+    name: typecheck, lint, coverage and build
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
       - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
         with:
           node-version: '22'
           cache: npm
+          cache-dependency-path: package-lock.json
       - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
         with:
           python-version: '3.14'
           cache: pip
           cache-dependency-path: bridges/dspy/requirements.lock
-      - run: npm ci --no-audit --no-fund
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
       - name: Install the real DSPy bridge for integration tests
         run: |
           python -m venv bridges/dspy/.venv
           bridges/dspy/.venv/bin/python -m pip install -r bridges/dspy/requirements.lock
           bridges/dspy/.venv/bin/python -m pip install --no-deps -e bridges/dspy
-      - run: npm run check
+
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Test with per-file coverage thresholds
+        run: npm run test:coverage
+      - name: Build
+        run: npm run build
+
       - name: Test the Python bridge
         working-directory: bridges/dspy
         run: .venv/bin/python -m pytest
@@ -50,6 +81,7 @@ jobs:
               'Every Python module and the total must reach 90% lines and branches'
           print('COVERAGE: every module and total passed 90% lines and branches')
           PY
+
       - name: Install documentation dependencies
         run: npm ci --prefix website --no-audit --no-fund
       - name: Check documentation types and endpoint coverage
