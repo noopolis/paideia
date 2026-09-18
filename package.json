@@ -3,6 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "description": "Evaluate native agents, replay evidence and optimize prompt resources.",
+  "license": "MIT",
+  "author": "Juan Cruz Fortunatti",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/noopolis/paideia.git"
+  },
   "type": "module",
   "engines": {
     "node": ">=22.19.0"
