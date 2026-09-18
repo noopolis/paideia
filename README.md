@@ -92,8 +92,8 @@ are explicit; installing a file does not claim the runtime loaded or followed it
 - Native skill discovery, automatic project preparation and `.spawnignore`
   enforcement still need their owning integrations. Local `spawnfile train`
   delegation works through an explicitly registered isolated preparation. The
-  [newsroom example](examples/newsroom-reporting/README.md) is a production-derived
-  authoring fixture, not a runnable replica of the organization.
+  [newsroom example](examples/newsroom-reporting/README.md) is a synthetic
+  authoring fixture, not a runnable replica of any organization.
 - Subject support currently covers Codex and Daimon. Claude supplies optimizer
   and judge inference; standalone Pi, Claude-as-subject and OpenClaw need adapters.
 - Cancellation reports acknowledged scope and unknown remote work. It cannot

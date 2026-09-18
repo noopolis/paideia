@@ -8,3 +8,4 @@ coverage/
 !.env.example
 *.tsbuildinfo
 .DS_Store
+examples/imported/

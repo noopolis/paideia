@@ -13,6 +13,6 @@ Paideia's source. No runnable YAML language or task suite is implemented yet.
 - Freeze evidence families and prevent related records leaking across splits.
 - Generic sample data may be tracked. Private corpora, production memory and runs
   stay with their owning projects. Illustrative project-specific authoring proposals
-  belong in examples/, including the Example Newsroom reference example.
+  belong in examples/, including the newsroom reporting reference example.
 - Validate schemas, references, split integrity and representative negative cases
   once the language exists. Example YAML remains a proposal until approved.

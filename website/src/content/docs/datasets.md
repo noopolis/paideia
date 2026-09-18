@@ -102,5 +102,5 @@ evidence remains unknown and never passes a required check.
 
 The canonical [authoring semantics](/paideia/reference/authoring.md) and
 [fixture rules](/paideia/reference/fixtures.md) are linked as Markdown downloads;
-larger examples live in `examples/newsroom-reporting/` in the repository. The newsroom
-example is an authoring reference; it is not a proven native environment replica.
+larger examples live in `examples/newsroom-reporting/` in the repository. That newsroom
+example is a synthetic authoring reference, not a proven native environment replica.
