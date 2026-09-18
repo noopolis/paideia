@@ -8,4 +8,11 @@ coverage/
 !.env.example
 *.tsbuildinfo
 .DS_Store
-examples/imported/
+
+# Examples are allowlisted. Anything new under examples/ stays ignored until it is
+# added here explicitly, so imported project material cannot arrive unnoticed.
+examples/*
+!examples/AGENTS.md
+!examples/CLAUDE.md
+!examples/native-formatting/
+!examples/newsroom-reporting/
