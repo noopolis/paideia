@@ -75,6 +75,8 @@ not required. The invocation assigns roles explicitly, rather than trusting name
 
 The [CLI guide](website/src/content/docs/run-locally.md) documents commands and
 budgets. The [cost reference](docs/costs.md) explains estimates and incomplete usage.
+The [grader guide](docs/graders.md) covers calibrated decision models, teacher
+labeling and escalation, and the `eval: grader` evaluator.
 The [training YAML guide](docs/training-configuration.md) configures judge templates,
 model fallbacks, exact-result caching and optimizer budgets in the dataset itself.
 The [DSPy bridge guide](bridges/dspy/README.md) covers its locked Python
