@@ -19,6 +19,7 @@ const realBridgeTests = [
   'src/cli/training/protocol.test.ts',
   'src/cli/training/resume.test.ts',
   'src/experiments/training/routing.test.ts',
+  'src/inference/codex/strict-schema-proposal.test.ts',
   'src/optimization/checkpoint.test.ts',
   'src/optimization/population.test.ts',
   'src/optimization/runner-home.test.ts',
