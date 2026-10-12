@@ -20,6 +20,7 @@ const realBridgeTests = [
   'src/cli/training/resume.test.ts',
   'src/experiments/training/routing.test.ts',
   'src/optimization/checkpoint.test.ts',
+  'src/optimization/population.test.ts',
   'src/optimization/runner-home.test.ts',
   'src/optimization/runner.test.ts',
 ];
