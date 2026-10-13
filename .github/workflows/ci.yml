@@ -31,6 +31,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  commit-message:
+    name: Commit messages and author allowlist
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    steps:
+      - name: Check out pull request head with full history
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Set up Node
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '22'
+      - name: Check every pull request commit before install
+        run: node .github/scripts/ci/commit-message.mts --range "origin/$GITHUB_BASE_REF..HEAD"
+
   check:
     name: typecheck, lint, coverage and build
     runs-on: ubuntu-latest

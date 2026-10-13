@@ -35,7 +35,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'suite',
-          include: ['src/**/*.test.ts', 'tooling/**/*.test.ts', 'viewer/**/*.test.ts'],
+          include: ['src/**/*.test.ts', 'tooling/**/*.test.ts', '.github/scripts/ci/*.test.mts', 'viewer/**/*.test.ts'],
           exclude: [...configDefaults.exclude, ...realBridgeTests],
           sequence: { groupOrder: 0 },
         },
