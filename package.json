@@ -82,7 +82,7 @@
   ],
   "scripts": {
     "build": "tsc -p tsconfig.build.json",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --project .github/scripts/ci/tsconfig.json",
     "lint": "eslint .",
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",

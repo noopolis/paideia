@@ -19,7 +19,9 @@ const realBridgeTests = [
   'src/cli/training/protocol.test.ts',
   'src/cli/training/resume.test.ts',
   'src/experiments/training/routing.test.ts',
+  'src/inference/codex/strict-schema-proposal.test.ts',
   'src/optimization/checkpoint.test.ts',
+  'src/optimization/population.test.ts',
   'src/optimization/runner-home.test.ts',
   'src/optimization/runner.test.ts',
 ];
@@ -33,7 +35,7 @@ export default defineConfig({
         extends: true,
         test: {
           name: 'suite',
-          include: ['src/**/*.test.ts', 'tooling/**/*.test.ts', 'viewer/**/*.test.ts'],
+          include: ['src/**/*.test.ts', 'tooling/**/*.test.ts', '.github/scripts/ci/*.test.mts', 'viewer/**/*.test.ts'],
           exclude: [...configDefaults.exclude, ...realBridgeTests],
           sequence: { groupOrder: 0 },
         },
