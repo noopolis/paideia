@@ -379,7 +379,7 @@ Local source revisions inspected:
 |---|---|
 | Daimon merged source | `599f9c06383eca2db50c99d7bcfba91e889a79ab` |
 | Mneme local checkout | `28a3a299426b8af89cd69173df146ace9531edca` |
-| Spawnfile local checkout | `b6afd9e74c778ea17ed0abaff5a6cc8c7eda1b0c` |
+| Spawnfile local checkout | `28607bcfd3d742e6ac99640ee135c9c7263fdaf6` |
 | Simfile local checkout | `4bc209e9a7c46523ba7e89dc8d253a8c89b35c8d` |
 | Stele local checkout | `f904b76ea7c473da7ba2bbd5d3e39b82d799fe86` |
 
