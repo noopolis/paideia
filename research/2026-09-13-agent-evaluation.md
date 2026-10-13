@@ -26,7 +26,7 @@ they do not imply every possible integration is already implemented.
 
 ## What exists already
 
-These are source inspections, not newly executed integration tests. Daimon was read on `fix/required-codex-mcp` at `afd872ebb01c82c186dae410db3c59e3df150aa0`. The inspected capture/harness/CLI files match merged `origin/main` at `599f9c06383eca2db50c99d7bcfba91e889a79ab`; raw capture v2 was introduced by `589948a99b8d8ace7e3cd645b0c9e6639e04646f`. This establishes merged source availability, **not deployment in a production image**. Other local revisions are recorded under provenance below.
+These are source inspections, not newly executed integration tests. Daimon was read on `fix/required-codex-mcp` at `df161fdde39ea59d38a7a0b5fb95eb4e449383b6`. The inspected capture/harness/CLI files match merged `origin/main` at `36ee1fe1646fc5b4980b62e9fb74982a2f4556ff`; raw capture v2 was introduced by `589948a99b8d8ace7e3cd645b0c9e6639e04646f`. This establishes merged source availability, **not deployment in a production image**. Other local revisions are recorded under provenance below.
 
 | Surface | What the current code actually provides | Consequence for Paideia |
 |---|---|---|
@@ -377,7 +377,7 @@ Local source revisions inspected:
 
 | Repository | Commit |
 |---|---|
-| Daimon merged source | `599f9c06383eca2db50c99d7bcfba91e889a79ab` |
+| Daimon merged source | `36ee1fe1646fc5b4980b62e9fb74982a2f4556ff` |
 | Mneme local checkout | `28a3a299426b8af89cd69173df146ace9531edca` |
 | Spawnfile local checkout | `28607bcfd3d742e6ac99640ee135c9c7263fdaf6` |
 | Simfile local checkout | `4bc209e9a7c46523ba7e89dc8d253a8c89b35c8d` |
