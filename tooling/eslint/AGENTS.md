@@ -11,3 +11,6 @@ change files. Paths are rooted in ESLint's explicit cwd, including fixture tests
 - Check 90% per-file coverage with npx vitest run tooling --coverage.
 - Only root `.tmp/` is excluded for generated test/tool caches; nested `.tmp/`
   and other hidden implementation folders remain checked.
+
+Only adapters/spawnfile may import the public spawnfile/training entry point;
+compiler implementation subpaths and direct CLI package imports remain forbidden.

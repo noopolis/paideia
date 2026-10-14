@@ -15,3 +15,12 @@ evidence stays in research/; user-facing pages belong in website/.
   Prose edits need no synthetic evaluator or review-council machinery.
 
 Training configuration documents explicit validation and the generic named moment preparation receipt; org state reconstruction remains integration-owned.
+
+Concurrent-trial docs describe shared-session composition and finalization ordering;
+model-free integration tests do not establish live historical fidelity.
+
+Document emitted receipt activation separately from legacy injected sessions:
+public receiver owns canonical lowering/compiler/reset, static private registration
+owns case/domain hooks and model routes, output retains immutable resume evidence.
+Private transport/research callbacks are registered separately from public session
+compilation, lease/reset and freshness operations.

@@ -28,6 +28,8 @@ export interface TrialOptions {
   resources?: Readonly<Record<string, string>>;
   protectedPaths?: readonly string[];
   prepare(paths: TrialPaths, signal: AbortSignal): Promise<PreparedTrial>;
+  /** Called only after awaited durable trial.captured; finalize before publishing completion or removing scratch. */
+  finalizeEnvironment?: (paths: TrialPaths, report: TrialReport) => Promise<void>;
   registry: EvaluationRegistry;
   evaluation: Pick<EvaluationContext, 'judges' | 'graders' | 'embeddings' | 'readText' | 'observeJudgeAttempt'>;
   /** Awaited durable sink. A write failure interrupts the trial. */

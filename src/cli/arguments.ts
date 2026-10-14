@@ -22,7 +22,7 @@ const graderFlags: Record<string, readonly string[]> = {
 };
 const flags: Record<string, readonly string[]> = {
   validate: ['judge', 'judge-citation-repairs'], evaluate: common, view: ['port', 'timeout-ms'],
-  train: [...common, 'concurrency', 'slots-file', 'train', 'validation', 'test', 'editable', 'validation-group', 'optimizer-model', 'bridge-command', 'max-proposals', 'seed', 'dry-run', 'resume', 'repair-measurements', 'repair-context'],
+  train: [...common, 'spawnfile-execution', 'concurrency', 'slots-file', 'train', 'validation', 'test', 'editable', 'validation-group', 'optimizer-model', 'bridge-command', 'max-proposals', 'seed', 'dry-run', 'resume', 'repair-measurements', 'repair-context'],
 };
 
 export const helpText = `Paideia — explicit local native-agent experiments

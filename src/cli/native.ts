@@ -7,7 +7,7 @@ import { createEvaluationRegistry } from '../evaluation/index.js';
 import { count, judgeCitationRepairs, one, pairs, type CliArguments } from './arguments.js';
 import { CliDatasets } from './datasets.js';
 import type { CliDependencies, CliIO } from './types.js';
-import { spawnfileEnvironment } from './spawnfile/index.js';
+import { createSpawnfileSessionIntegration, spawnfileEnvironment } from './spawnfile/index.js';
 import { prepareSpawnfileInputs } from './spawnfile/index.js';
 import type { StoredTrialOptions } from '../experiments/index.js';
 
@@ -51,6 +51,9 @@ export async function prepareCliInputs(args: CliArguments, io: CliIO, dependenci
 
 export async function prepareNative(args: CliArguments, io: CliIO, dependencies: CliDependencies, timeoutMs: number,
   prepared?: Awaited<ReturnType<typeof prepareCliInputs>>) {
+  if (dependencies.spawnfile?.trainingSession) dependencies = { ...dependencies, spawnfile: createSpawnfileSessionIntegration({
+    ...dependencies.spawnfile.trainingSession, integration: dependencies.spawnfile,
+  }) };
   const inputs = prepared ?? await prepareCliInputs(args, io, dependencies);
   const { runtime, model, judges, datasets } = inputs;
   const graders = await datasets.buildGraders(dependencies.grader, args.command === 'train');
@@ -69,7 +72,8 @@ export async function prepareNative(args: CliArguments, io: CliIO, dependencies:
     prepareEnvironment = spawnfileEnvironment(dependencies.spawnfile!, context);
   }
   const subjectRoot = 'context' in inputs ? dependencies.spawnfile!.subjectRoot : undefined;
-  return { ...inputs, adapter, inference, prepareEnvironment, cacheRoots, subjectRoot, closeInference: configured.close,
+  const closeEnvironment = 'context' in inputs ? dependencies.spawnfile!.closeEnvironment : undefined;
+  return { ...inputs, adapter, inference, prepareEnvironment, closeEnvironment, cacheRoots, subjectRoot, closeInference: configured.close,
     registry: createEvaluationRegistry(),
     evaluation: { judges: configured.judges, graders,
       embeddings: {}, readText: (path: string) => datasets.readCriterion(path) },

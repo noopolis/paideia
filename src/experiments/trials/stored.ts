@@ -15,7 +15,7 @@ export interface NativePreparationContext {
   resources: Record<string, string>;
 }
 
-export interface StoredTrialOptions extends Omit<TrialOptions, 'candidateId' | 'persist' | 'prepare'> {
+export interface StoredTrialOptions extends Omit<TrialOptions, 'candidateId' | 'persist' | 'prepare' | 'finalizeEnvironment'> {
   datasetId: string;
   candidate: CandidateManifest;
   store: ExperimentStore;
@@ -24,7 +24,9 @@ export interface StoredTrialOptions extends Omit<TrialOptions, 'candidateId' | '
   observeEvent?: (event: TrialEvent) => Promise<void>;
   /** The environment may install tools/state; instructions come from declared candidate resources. */
   prepareEnvironment?: (paths: Parameters<TrialOptions['prepare']>[0], signal: AbortSignal,
-    context: NativePreparationContext) => Promise<Omit<Awaited<ReturnType<TrialOptions['prepare']>>, 'instructions'>>;
+    context: NativePreparationContext) => Promise<Omit<Awaited<ReturnType<TrialOptions['prepare']>>, 'instructions'> & { evidence?: unknown }>;
+  /** Trusted reset after native closure and capture; failure prevents slot reuse and durable evaluation. */
+  closeEnvironment?: (paths: TrialReport['paths'], context: NativePreparationContext, report: TrialReport) => Promise<unknown>;
 }
 export async function runStoredTrial(options: StoredTrialOptions): Promise<TrialReport> {
   if ('schema' in options.record && options.record.schema === 'paideia.cost-record.v1') throw new Error('Cost-only records cannot execute trials');
@@ -43,9 +45,17 @@ export async function runStoredTrial(options: StoredTrialOptions): Promise<Trial
   await options.store.putBlob(options.id, JSON.stringify(options.candidate), 'evaluator');
   await options.store.putBlob(options.id, JSON.stringify(options.record), 'evaluator');
   const report = await runTrial({ ...options, candidateId: options.candidate.id,
+    finalizeEnvironment: options.closeEnvironment ? async (paths, report) => {
+      const evidence = await options.closeEnvironment!(paths, structuredClone({ id: options.id, phase: options.phase,
+        record: options.record, slot: options.slot, candidate: options.candidate, resources: { ...options.resources } }), report);
+      await options.store.appendEvent(options.id, { id: randomUUID(), payload: { type: 'environment.closed', evidence } }, 'evaluator');
+    } : undefined,
     protectedPaths: [options.storeRoot, ...(options.protectedPaths ?? [])],
     persist: async event => {
-      await options.store.appendEvent(options.id, { id: randomUUID(), payload: event }, 'raw');
+      const payload = event.type === 'trial.captured'
+        ? { type: event.type, payload: { report: await options.store.putBlob(options.id, JSON.stringify(event.payload), 'raw') } }
+        : event;
+      await options.store.appendEvent(options.id, { id: randomUUID(), payload }, 'raw');
       await options.observeEvent?.(event);
     },
     prepare: async (paths, signal) => {
@@ -55,7 +65,12 @@ export async function runStoredTrial(options: StoredTrialOptions): Promise<Trial
         candidate: options.candidate, resources: { ...options.resources },
       }));
       await options.store.appendEvent(options.id, { id: randomUUID(), payload: { type: 'candidate.installed', receipts } }, 'evaluator');
-      return { ...environment, instructions: instructions.map(resource => resource.content).join('\n\n') };
+      const { evidence, ...prepared } = environment ?? {};
+      if (evidence !== undefined) {
+        const reference = await options.store.putBlob(options.id, JSON.stringify(evidence), 'evaluator');
+        await options.store.appendEvent(options.id, { id: randomUUID(), payload: { type: 'environment.prepared', evidence, reference } }, 'evaluator');
+      }
+      return { ...prepared, instructions: instructions.map(resource => resource.content).join('\n\n') };
     } });
   await options.store.appendEvaluation(options.id, { id: randomUUID(), report }, 'evaluator');
   return report;

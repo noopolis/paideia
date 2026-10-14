@@ -69,3 +69,11 @@ Evaluation services preserve injected grader runtimes alongside judges and embed
 Preparation receives the caller's leased `slot` descriptor unchanged; SubjectStart
 receives the same identity. Runtime integrations own resource mapping. Never infer
 fixed worker identities, ports or paths in the experiment layer.
+
+Stored environments may return protected preparation evidence and closeEnvironment
+reset evidence. Persist preparation evidence in immutable protected blobs. Await
+trial.captured (an immutable raw report blob and its durable reference) after
+capture/verified native closure, before destructive finalization. Publish
+trial.completed and durable evaluation only after reset evidence persists. A reset
+or sink failure leaves no completion that recovery could treat as reusable; keep
+subject scratch until completion persistence succeeds.

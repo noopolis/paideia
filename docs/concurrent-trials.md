@@ -48,3 +48,64 @@ The launcher does not inject optimizer concurrency controls into comparisons;
 comparison execution remains serial.
 The full cross-repository descriptor/launch contract and actual native-agent overlap
 still require integration verification. No models or external services were used.
+
+## Declared shared-container sessions
+
+The production CLI accepts Spawnfile's emitted `--spawnfile-execution` receipt
+before parsing datasets. A static `CliDependencies.spawnfileDeclaration` registration
+supplies named domain case/reconstruction hooks and explicit inference model routes.
+The optional public `spawnfile/training` receiver validates canonical authoring,
+context and complete dataset pins, lowers all splits inside the output mount,
+and binds real compiler/reset operations. The CLI validates the provisioned slot
+count, creates one persisted freshness store and constructs the native session.
+Neither compiler operations nor a `trainingSession` dependency are injected by
+the image integration. A conflicting injected session is refused.
+
+Lowered moments and their immutable byte inventory persist under
+`OUT/.spawnfile-execution`; resume verifies this evidence and preserves execution
+identity. Each trial's generic rewind happens before its domain reconstruction
+hook, which receives the fresh moment root, compilation and broker projection.
+Legacy explicit `createSpawnfileSessionIntegration` composition remains available
+through `@noopolis/paideia/cli`; it is independent of declared receipt activation.
+
+Every admitted trial resets its leased slot with a fresh nonce/generation floor,
+binds candidate scratch to that slot, compiles canonical source plus selected
+candidate resources, then calls only the moment's declared reconstruction hook.
+The hook receives the compilation receipt and supervisor-attested broker mapping.
+It projects domain state and writes the native launch, including the moment's
+`effectiveAt` task clock. The built-in path refuses agent/model/engine or clock
+mismatches; existing rewind and native launch verifiers enforce their own evidence
+contracts. No per-trial authentication copies or external staging queue are used.
+
+After the native adapter proves closure and capture completes, `trial.captured`
+durably references an immutable protected report blob containing the final
+artifact bytes. Only then may `closeEnvironment` reset the slot again and advance
+its persisted freshness floor. Protected preparation evidence stores the original
+preflight bytes and SHA256, with its former pathname as provenance, before native
+execution; overwriting that pathname during reset cannot change its evidence.
+Protected
+`environment.prepared` / `environment.closed` events retain candidate, moment,
+compilation, generation and closure evidence. Reset and evidence persistence must
+finish before `trial.completed` or durable evaluation; failure quarantines the
+lease and cannot be recovered as a completed trial. Cleanup has a separate bounded
+deadline, so cancellation cannot skip reset or quietly authorize slot reuse.
+Capture persistence failure prevents destructive reset and retains subject scratch;
+reset or closure-event persistence failure retains the already durable capture.
+
+Adjacent tests exercise simultaneous admission, blocked callers, clean reuse,
+candidate overlays, canonical broker binding, clock mutations and reset refusal.
+These are fake-runtime tests. Real native moment fidelity, private-hook adoption
+and a complete authored training run remain integration acceptance work.
+# Declared native callbacks
+
+`SpawnfileDeclarationIntegration.native.transportDelivery` reserves and publishes
+domain transport wakes. `native.execution.externalInputs` supplies bounded domain
+continuations, including research responses. Both are registered callbacks, not
+JSON receipt fields. The built-in session fixes child execution and its persisted
+freshness store, and retains public compiler, lease and supervisor-reset ownership.
+Registrations cannot replace those operations through native options.
+
+Declaration subprocess tests require `SPAWNFILE_TEST_SOURCE_ROOT` to point at an
+explicitly provisioned, receiver-capable compiler source. CI must provision a pinned
+paired revision; an arbitrary sibling directory or published package without the
+receiver does not satisfy this contract.

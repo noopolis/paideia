@@ -39,3 +39,18 @@ Owns explicit local commands, configuration selection and human diagnostics.
   not just whether a child process launched.
 
 Explicit --validation datasets flow through execution, costs and repair without repartitioning; groups and explicit validation cannot compete.
+
+A registered trainingSession is automatically composed during native preparation.
+The declaration supplies slot count and public compiler/reset operations; named
+private hooks reconstruct domain state. Generic CLI preparation never manages a
+per-trial credential realm or external staging queue.
+
+--spawnfile-execution is consumed before authored dataset parsing. Static
+spawnfileDeclaration registrations supply domain hooks and explicit model routes;
+the receipt activates public compiler/reset operations, immutable moment lowering,
+shared persisted freshness and the native adapter. No trainingSession injection is
+needed for declared launches. Reject argument drift and slot-count mismatches.
+
+Real public-compiler declaration subprocess tests and their mutation checks share
+the serialized integration project with DSPy/native CLI integration tests, so
+parallel workers cannot consume their bounded process deadlines.

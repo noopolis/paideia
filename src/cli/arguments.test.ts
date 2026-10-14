@@ -78,3 +78,9 @@ it('allows finite nonnegative spend caps only for grader calibrate and grade', (
   }
   expect(() => parseArguments(['grader', 'validate', '--grader', 'g.yaml', '--max-spend-usd', '1'])).toThrow('Unsupported');
 });
+
+it('accepts the emitted execution receipt only for training', () => {
+  expect(parseArguments(['train', '--spawnfile-execution', '/run/paideia/execution.json']).flags['spawnfile-execution'])
+    .toEqual(['/run/paideia/execution.json']);
+  expect(() => parseArguments(['evaluate', 'data', '--spawnfile-execution', 'receipt'])).toThrow();
+});

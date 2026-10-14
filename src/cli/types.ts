@@ -5,6 +5,8 @@ import type { BlobReference } from '../storage/index.js';
 import type { DatasetRegistry, EditPolicy, NativePreparationContext, StoredTrialOptions } from '../index.js';
 import type { TrainingMomentPreparation } from './spawnfile/moments.js';
 import type { SpawnfileTrainingContext } from './spawnfile/index.js';
+import type { SpawnfileDeclarationIntegration } from './spawnfile/index.js';
+import type { SpawnfileSessionConfiguration } from './spawnfile/index.js';
 
 export interface CliIO {
   cwd: string;
@@ -25,6 +27,8 @@ export interface CliDependencies {
   grokGrantAuthority?: () => Promise<GrokInferenceGrantAuthority>;
   /** Trusted project composition. Registration is static; native factory runs only after preflight. */
   spawnfile?: SpawnfileCliIntegration;
+  /** Static domain hooks only; the execution receipt activates public session operations. */
+  spawnfileDeclaration?: SpawnfileDeclarationIntegration;
 }
 
 export interface CliExecutionIdentityContext {
@@ -37,6 +41,8 @@ export interface CliExecutionIdentityContext {
 export interface SpawnfileCliIntegration {
   id: string;
   version: string;
+  /** Declared shared-container session. CLI composes compilation/reset/hooks before native execution. */
+  trainingSession?: Omit<SpawnfileSessionConfiguration, 'integration'>;
   /** Native scratch path inside the launch environment; never an evaluator root. */
   subjectRoot?: string;
   /** Trusted immutable inference image + invocation-policy identity; omitted means ambient host execution. */
@@ -59,6 +65,7 @@ export interface SpawnfileCliIntegration {
   createAdapter(context: SpawnfileTrainingContext, options: { model: string; timeoutMs: number }): SubjectAdapter;
   prepareEnvironment(paths: Parameters<NonNullable<StoredTrialOptions['prepareEnvironment']>>[0], signal: AbortSignal,
     trial: NativePreparationContext, context: SpawnfileTrainingContext): ReturnType<NonNullable<StoredTrialOptions['prepareEnvironment']>>;
+  closeEnvironment?: StoredTrialOptions['closeEnvironment'];
 }
 
 export interface InvocationIndex {

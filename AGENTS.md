@@ -106,6 +106,8 @@ These checks run through npm run check and the review workflow:
   get green. Genuine tool-imposed exceptions must be narrow and documented.
 - Every claimed guard needs a negative check: violate the property and verify
   the actual gate fails. Test behavior and failure modes, not comment existence.
+- Shared-session CLI training tests use the real bridge project's serialized
+  scheduling; adjacent mutation tests run isolated copies of the actual assertions.
 
 ## Bounded maintenance and self-repair
 

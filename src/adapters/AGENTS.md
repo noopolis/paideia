@@ -17,3 +17,6 @@ for tested native versions, observations and explicit limitations.
 - Native conformance tests belong with each adapter. Prove actual work, supported
   mappings and failure handling using pinned runtimes; toy processes test plumbing,
   not native-agent compatibility. First acceptance needs two independent harnesses.
+
+spawnfile/ loads the optional public training compiler seam for declared CLI
+activation. Runtime compilation and slot reset remain owned by Spawnfile.

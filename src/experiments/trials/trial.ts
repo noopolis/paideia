@@ -42,6 +42,7 @@ export async function runTrial(options: TrialOptions): Promise<TrialReport> {
   let execution: TrialReport['execution'] = 'completed';
   let sinkFailed = false;
   let closed = false;
+  let completionPersisted = false;
   let observationTail = Promise.resolve();
   let observationFailure: string | undefined;
   let diagnostic: TrialReport['diagnostic'];
@@ -220,10 +221,13 @@ export async function runTrial(options: TrialOptions): Promise<TrialReport> {
       expectedTurns: inputs.length, turns, evaluation, live: structuredClone(live.history), decisiveFailure: structuredClone(live.decisive),
       stop: structuredClone(finalStop), ...(diagnostic ? { diagnostic: structuredClone(diagnostic) } : {}), ...(error ? { error } : {}) };
     if (sinkFailed) throw new Error('Trial evidence persistence failed; no durable success report');
+    await persist('trial.captured', report);
+    await options.finalizeEnvironment?.(paths, structuredClone(report));
     await persist('trial.completed', report);
+    completionPersisted = true;
     return report;
   } finally {
     control.dispose();
-    await releaseTrialScratch(paths, options.subjectRoot, nativeClosureConfirmed && control.hostWork === 'settled');
+    await releaseTrialScratch(paths, options.subjectRoot, completionPersisted && nativeClosureConfirmed && control.hostWork === 'settled');
   }
 }

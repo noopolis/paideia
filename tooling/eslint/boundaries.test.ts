@@ -104,3 +104,13 @@ test('new unsaved paths remain absolute and unowned paths do not acquire a modul
   expect(canonicalPath('./a-file-that-does-not-exist')).toBe(path.resolve('./a-file-that-does-not-exist'));
   expect(owner([])).toBeUndefined();
 });
+
+test('Spawnfile activation uses only its public adapter package boundary', async () => {
+  const f = await fixture();
+  expect(await f.check("import 'spawnfile/training';", 'src/adapters/spawnfile/index.ts')).toEqual([]);
+  for (const [specifier, file] of [
+    ['spawnfile/training', 'src/cli/spawnfile/declaration.ts'],
+    ['spawnfile/src/compiler/training/session/slot.js', 'src/adapters/spawnfile/index.ts'],
+    ['spawnfile/training', 'src/experiments/training/host.ts'],
+  ]) expect(await f.check(`import '${specifier}';`, file)).toEqual([expect.objectContaining({ messageId: 'runtime' })]);
+});

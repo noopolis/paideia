@@ -1,4 +1,4 @@
-import { readSpawnfileContext } from './spawnfile/index.js';
+import { activateSpawnfileDeclaration, readSpawnfileContext } from './spawnfile/index.js';
 import { resolveTrainingOptimizer, populationSearch, bridgeProposal } from './training/index.js';
 import { runGraderCommand } from './grader/index.js';
 import { readMeasurementRepair, verifyRepairProjection, importMeasurementCaptures, readParentCheckpoints } from '../experiments/repair/index.js';
@@ -87,6 +87,7 @@ async function execute(args: CliArguments, io: CliIO, dependencies: CliDependenc
       subjectRoot: native.subjectRoot,
       registry: native.registry, evaluation: native.evaluation, resources: native.resources,
       prepareEnvironment: native.prepareEnvironment,
+      closeEnvironment: native.closeEnvironment,
       store, storeRoot: native.out, protectedPaths: [native.sourceRoot, ...native.datasets.protectedDirectories, ...native.cacheRoots], signal,
     };
     const id = checkpoint?.id ?? attemptId;
@@ -192,7 +193,9 @@ export async function main(argv: readonly string[], io: CliIO, dependencies: Cli
   let timer: ReturnType<typeof setTimeout> | undefined;
   let timedOut = false;
   try {
-    const authored = authoredArguments(parseArguments(argv), io);
+    const activated = await activateSpawnfileDeclaration(parseArguments(argv), io, dependencies);
+    dependencies = activated.dependencies;
+    const authored = authoredArguments(activated.args, io);
     const context = authored.command === 'train' && authored.flags['spawnfile-context'] && dependencies.spawnfile?.trainingOptimizer
       ? readSpawnfileContext(resolve(io.cwd, one(authored, 'spawnfile-context'))) : undefined;
     const args = await resolveTrainingOptimizer(authored, dependencies.spawnfile, context);

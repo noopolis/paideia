@@ -28,7 +28,9 @@ export const moduleBoundaries: Rule.RuleModule = {
         const daimonPublic = from[0] === 'src' && from[1] === 'adapters' && (
           from[2] === 'daimon' && specifier === '@noopolis/daimon/pi' ||
           from[2] === 'daimon-native' && specifier === '@noopolis/daimon/runtime');
-        if (!daimonPublic) {
+        const spawnfilePublic = from[0] === 'src' && from[1] === 'adapters' &&
+          from[2] === 'spawnfile' && specifier === 'spawnfile/training';
+        if (!daimonPublic && !spawnfilePublic) {
           context.report({ node, messageId: 'runtime' });
         }
         return;
