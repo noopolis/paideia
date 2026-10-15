@@ -94,6 +94,7 @@ reward policy; never turn a deferred delivery into pass. Default report bytes
 retain their existing shape when the flag is absent.
 
 Classify failed execution at the failure decision: failureKind is native-infrastructure
-only without a completed native turn or decisive behavioral witness. Collection,
-observation closure and evaluation failures are measurement failures; decisive
-witnesses take precedence as behavioral failures. Omit the field on other paths.
+only without a completed or deferred native turn or decisive behavioral witness.
+Collection, observation closure and evaluation failures follow the same rule:
+measurement only after completed or deferred native work; decisive witnesses take
+precedence as behavioral failures. Omit the field on other paths.

@@ -333,3 +333,40 @@ it('does not replace a deferred native result whose collection failed afterwards
   expect(counts.get('Alpha')).toBe(1);
   expect(events.filter(event => event.type === 'trial.retry')).toHaveLength(0);
 });
+
+it('replaces a cancelled sealed-test turn when final collection cannot bind terminal evidence', async () => {
+  const { options, events } = await fixture(); options.trialRetries = 1;
+  const { counts } = native(options, 1, 'Gamma');
+  const start = options.native.adapter.start;
+  options.native.adapter.start = async input => {
+    const session = await start(input);
+    let cancelled = false;
+    return { ...session, run: async (turn, signal) => {
+      const result = await session.run(turn, signal); cancelled = result.status === 'failed';
+      return cancelled ? { ...result, status: 'cancelled', text: '', coverage: [], error: 'Native subject aborted' } : result;
+    }, stop: async reason => ({ ...await session.stop(reason), ...(cancelled ? { unevidenced: 'terminal-unbound' as const } : {}) }) };
+  };
+  options.native.prepareEnvironment = async (_paths, _signal, context) => {
+    let collections = 0;
+    return { collect: async () => {
+      if (++collections === 2 && context.record.id === 'Gamma' && counts.get('Gamma') === 1) {
+        throw new Error('executionId absent');
+      }
+      return {};
+    } };
+  };
+  optimizer();
+  const report = await trainAgent(options);
+  expect(counts.get('Gamma')).toBe(2);
+  expect(report.retries).toHaveLength(1);
+  const failed = report.trials.find(trial => trial.id === report.retries![0]!.failedTrialId)!;
+  expect(failed).toMatchObject({ phase: 'test', execution: 'failed', failureKind: 'native-infrastructure',
+    error: 'Final collection failed: Error: executionId absent', hostWork: 'settled',
+    stop: { state: 'acknowledged', quiescence: 'confirmed', unevidenced: 'terminal-unbound' } });
+  expect(failed.turns).toHaveLength(1);
+  expect(failed.turns[0]!.native).toMatchObject({ status: 'cancelled', error: 'Native subject aborted' });
+  expect(failed.decisiveFailure).toBeUndefined();
+  expect(report.trials.find(trial => trial.id === report.retries![0]!.replacementTrialId)!.execution).toBe('completed');
+  expect(report.heldOut[0]!.meanScore).toBe(1);
+  expect(events.filter(event => event.type === 'trial.retry')).toHaveLength(1);
+});
