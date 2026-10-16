@@ -77,6 +77,8 @@ The [CLI guide](website/src/content/docs/run-locally.md) documents commands and
 budgets. The [cost reference](docs/costs.md) explains estimates and incomplete usage.
 The [grader guide](docs/graders.md) covers calibrated decision models, teacher
 labeling and escalation, and the `eval: grader` evaluator.
+[Fixed questions and text checks](docs/fixed-questions.md) covers explicit identity
+calibration, per-case human grounding, word counts and source-value checks.
 The [training YAML guide](docs/training-configuration.md) configures judge templates,
 model fallbacks, exact-result caching and optimizer budgets in the dataset itself.
 The [DSPy bridge guide](bridges/dspy/README.md) covers its locked Python

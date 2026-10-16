@@ -14,6 +14,7 @@ coverage/
 examples/*
 !examples/AGENTS.md
 !examples/CLAUDE.md
+!examples/fixed-questions/
 !examples/native-formatting/
 !examples/newsroom-reporting/
 .tmp/
