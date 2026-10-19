@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  check:
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    needs: check
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+      - name: Verify the tag matches the package version and is on main
+        run: |
+          set -euo pipefail
+          version="$(node -p "require('./package.json').version")"
+          test "${GITHUB_REF_NAME}" = "v${version}" || { echo "::error::Tag ${GITHUB_REF_NAME} does not match package.json ${version}"; exit 1; }
+          git merge-base --is-ancestor "${GITHUB_SHA}" origin/main || { echo "::error::${GITHUB_REF_NAME} is not on main"; exit 1; }
+      - run: npm ci --no-audit --no-fund
+      - run: npm run build
+      - name: Pack the distribution with its lockfile
+        run: |
+          set -euo pipefail
+          mkdir release
+          npm pack --pack-destination release
+          cp package-lock.json release/package-lock.json
+          (cd release && sha256sum -- *.tgz package-lock.json > SHA256SUMS)
+          cat release/SHA256SUMS
+      - name: Publish the GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh release create "${GITHUB_REF_NAME}" release/* --title "Paideia ${GITHUB_REF_NAME#v}" --notes "Built by this workflow from ${GITHUB_SHA}. Install the tarball with its lockfile; verify against SHA256SUMS."
