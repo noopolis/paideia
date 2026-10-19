@@ -1,6 +1,6 @@
 {
   "name": "@noopolis/paideia",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "description": "Evaluate native agents, replay evidence and optimize prompt resources.",
   "license": "MIT",
