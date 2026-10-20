@@ -1,6 +1,6 @@
 {
   "name": "@noopolis/paideia",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "private": true,
   "description": "Evaluate native agents, replay evidence and optimize prompt resources.",
   "license": "MIT",
@@ -109,7 +109,7 @@
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
-    "@noopolis/daimon": "0.2.1",
+    "@noopolis/daimon": "0.2.2",
     "@types/node": "22.20.2",
     "@vitest/coverage-v8": "4.1.11",
     "eslint": "10.10.0",
